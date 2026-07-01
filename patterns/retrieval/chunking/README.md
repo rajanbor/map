@@ -9,6 +9,32 @@
 
 ---
 
+## Decision
+
+**Use Chunking if:**
+
+- ✅ your documents are longer than a paragraph or two
+- ✅ you're doing semantic / RAG retrieval over them
+- ✅ you need citable, passage-level answers
+
+**Avoid Chunking if:**
+
+- ❌ the unit is already right-sized (rows, FAQ pairs, short notes)
+- ❌ the task needs the whole document at once (full-doc summarization)
+- ❌ the data is tabular/relational (use structured filtering / SQL)
+
+## MAP Score
+
+| Dimension | Score | |
+|---|---|---|
+| Complexity | ★★☆☆☆ | 2/5 |
+| Latency | ★★★★★ | 5/5 |
+| Cost | ★★★★★ | 5/5 |
+| Accuracy Impact | ★★★★★ | 5/5 |
+| Production Readiness | ★★★★★ | 5/5 |
+
+<sub>Higher is better, except **Complexity** (lower is simpler). See [MAP Score](../../../map-score/SPEC.md).</sub>
+
 ## Problem
 
 You want a model to answer questions over a corpus that is far larger than its context
@@ -29,6 +55,18 @@ Chunking is the decision about *where to cut*. It sits upstream of embeddings an
 retrieval, and it quietly caps the quality of everything downstream: a reranker or a
 better model can't recover information that a bad split threw away. Get chunking wrong
 and you get confident answers grounded in the wrong fragment.
+
+**Before** (no chunking) vs **after** (chunked):
+
+```mermaid
+flowchart LR
+    subgraph Before
+      D1[Whole document] --> E1[One diluted embedding] --> R1[Weak, uncitable match]
+    end
+    subgraph After
+      D2[Document] --> S2[Chunk] --> E2[Focused embeddings] --> R2[Precise, citable match]
+    end
+```
 
 ## When to use
 
@@ -112,6 +150,29 @@ cutting every N characters.
 - Requires **tuning** (size, overlap, strategy) per corpus and embedding model.
 - Fixed-size splitting can **cut sentences or facts in half**.
 - Overlap and small chunks **inflate index size and cost**.
+
+## Failure Modes & Anti-patterns
+
+Common mistakes that quietly wreck retrieval quality:
+
+- ❌ **Splitting by a fixed character count** as the only strategy — cuts words and facts in half.
+- ❌ **No overlap** — a fact that straddles a boundary is lost from both chunks.
+- ❌ **Ignoring headings / document structure** — throws away the cheapest signal you have.
+- ❌ **Splitting code blocks by character count** — breaks functions and fenced blocks mid-way.
+- ❌ **One chunk size for every corpus** — prose, Markdown, and code need different boundaries.
+- ❌ **Tuning chunk size from a blog number** instead of measuring on your own corpus.
+
+Prefer natural boundaries over arbitrary cuts:
+
+```mermaid
+flowchart TB
+    subgraph Good [Good: structure-aware]
+      H[Heading] --> P1[Paragraph] --> P2[Paragraph]
+    end
+    subgraph Bad [Bad: blind fixed-size cut]
+      Par[Paragraph] --> X[cut at N chars] --> Half1[half a sentence] --> Half2[dangling clause]
+    end
+```
 
 ## Reference Implementation
 

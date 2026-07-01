@@ -10,6 +10,8 @@ for and how to write it well. The machine-readable starting point is
 | Section | Purpose | Tips |
 |---------|---------|------|
 | **Title** | The canonical name of the pattern. | Use the established name; list synonyms under "Also known as." |
+| **Decision** | A 20-second "use if / avoid if" so readers self-select fast. | Short ✅/❌ bullets at the very top. |
+| **MAP Score** | 1–5 star rating across five dimensions (see [MAP Score](../map-score/SPEC.md)). | A small table; higher is better, except Complexity. |
 | **Problem** | The concrete situation the reader is in when they reach for this pattern. | State it from the developer's point of view. 2–3 sentences. |
 | **Motivation** | Why the naive approach fails. | A short scenario beats abstract claims. |
 | **When to use** | Conditions where this is a good fit. | Concrete bullets. Prefer "if X and Y." |
@@ -19,6 +21,7 @@ for and how to write it well. The machine-readable starting point is
 | **Trade-offs** | The central tensions: latency, cost, complexity, quality. | A table works well; be specific. |
 | **Advantages** | What you gain. | Bullets. |
 | **Disadvantages** | What you pay. | Bullets. Don't soften them. |
+| **Failure Modes & Anti-patterns** | The "don't do this" list — common mistakes that break the pattern. | ❌ bullets; very practical. Most docs omit this. |
 | **Reference Implementation** | Minimal, framework-agnostic code illustrating the idea. | Keep it small; link to `reference/` for fuller code. |
 | **Production Variants** | How the pattern appears in real systems and at scale. | Name techniques neutrally; note common modifications. |
 | **Related Patterns** | Complementary, competing, or prerequisite patterns. | Link within MAP. |

@@ -1,0 +1,42 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+=========================================================
+
+The MAP knowledge base content — everything under `patterns/` and `docs/`, plus
+prose, diagrams, and other documentation in this repository (but NOT the source
+code, which is licensed separately under the MIT License in `LICENSE`) — is
+licensed under the Creative Commons Attribution 4.0 International License.
+
+You are free to:
+
+  - Share  — copy and redistribute the material in any medium or format.
+  - Adapt  — remix, transform, and build upon the material for any purpose,
+             even commercially.
+
+Under the following term:
+
+  - Attribution — You must give appropriate credit, provide a link to the
+    license, and indicate if changes were made. You may do so in any reasonable
+    manner, but not in any way that suggests the licensor endorses you or your
+    use.
+
+No additional restrictions — You may not apply legal terms or technological
+measures that legally restrict others from doing anything the license permits.
+
+Full legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+Summary:         https://creativecommons.org/licenses/by/4.0/
+
+How to attribute
+----------------
+
+When you reuse or adapt MAP content, include a credit such as:
+
+  "Based on MAP — Missing AI Patterns (https://github.com/rajanbor/map),
+   licensed under CC BY 4.0."
+
+Indicate if you changed the material.
+
+Not covered by this license
+---------------------------
+
+The names "MAP" and "Missing AI Patterns" and any project logos are trademarks/brand
+of the project and are NOT licensed under CC BY 4.0. See LICENSING.md.

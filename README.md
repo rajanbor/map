@@ -203,7 +203,14 @@ Nearer-term product goals:
 
 ## License
 
-MAP is released under the MIT License. You are free to use, copy, modify, fork,
-redistribute, and build on this repository, including commercially, as long as you keep
-the copyright notice. See [LICENSE](LICENSE). Documentation and diagrams are contributed
-under the same terms.
+MAP uses two licenses so it's easy to build on while authorship stays credited:
+
+- **Code** (`cli/`, `reference/`, `examples/`) — [MIT](LICENSE). Use, copy, modify, fork,
+  ship commercially; just keep the copyright notice.
+- **Content** (`patterns/`, `docs/`, prose, diagrams) — [CC BY 4.0](LICENSE-CONTENT).
+  Use, share, and adapt freely, including commercially, **with attribution** to MAP.
+- **Name & brand** — "MAP" / "Missing AI Patterns" are reserved; forks should use a
+  different name.
+
+Take the ideas and code and run with them; just credit MAP for the writing and don't
+ship your fork under the MAP name. Full details in [LICENSING.md](LICENSING.md).

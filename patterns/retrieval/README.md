@@ -5,12 +5,15 @@
 Patterns in this category follow the [MAP pattern template](../_template/PATTERN_TEMPLATE.md).
 See the [Roadmap](../../ROADMAP.md) for the full backlog and status.
 
-> No patterns published yet. Want to write one? Open a **"New Pattern"** issue and see
-> [CONTRIBUTING.md](../../CONTRIBUTING.md).
+## Published patterns
+
+- [**Chunking**](chunking/) — split documents into retrievable units.
 
 ## Planned patterns
 
-- Chunking Strategies
+Want to write one? Open a **"New Pattern"** issue and see
+[CONTRIBUTING.md](../../CONTRIBUTING.md).
+
 - Parent-Child (Small-to-Big) Retrieval
 - Hybrid Search (dense + sparse)
 - Metadata Filtering

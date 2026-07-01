@@ -35,11 +35,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Audit dependencies
+        run: pnpm audit --audit-level moderate
+
       - name: Typecheck
         run: pnpm run typecheck
 
-      - name: Test
-        run: pnpm test
+      - name: Test (with coverage gate)
+        run: pnpm run test:coverage
 
       - name: Smoke test (map init)
         run: |

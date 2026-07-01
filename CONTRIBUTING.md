@@ -10,6 +10,11 @@ maintainable. Please read it before opening your first pull request.
 
 By participating, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
+**Licensing of contributions:** by contributing you agree that your work is released
+under the project's licenses — **code under [MIT](LICENSE), content (patterns/docs)
+under [CC BY 4.0](LICENSE-CONTENT)** (inbound = outbound). You keep copyright to your
+contributions; content is credited via attribution. See [LICENSING.md](LICENSING.md).
+
 ---
 
 ## TL;DR — the contribution flow
@@ -208,6 +213,16 @@ Rules:
 - Releases are versioned by the root [`VERSION`](VERSION) file and tagged by the
   [Release workflow](.github/workflows/release.yml). Tagging is idempotent: if the tag
   for the current VERSION already exists, nothing happens.
+
+### Release policy: ship functionality, not meta
+
+A release must deliver **user-facing value** — a new pattern, a working CLI command or
+capability, a meaningful docs improvement. Do **not** cut a release that only contains
+project-internal churn (CI tweaks, refactors, governance, formatting). Batch that kind
+of change on `dev` and let it ride along with the next functional release.
+
+Rule of thumb: if a reader or a CLI user wouldn't notice the difference, it's not a
+release on its own. Bump `VERSION` and tag only when the release earns it.
 
 The full picture:
 

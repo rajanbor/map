@@ -1,0 +1,49 @@
+name: CLI
+
+# Typecheck, test, and smoke-test the MAP CLI. Runs on every PR into dev/main so it
+# can be a required status check. See .github/BRANCH_PROTECTION.md.
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+
+defaults:
+  run:
+    working-directory: cli
+
+jobs:
+  cli:
+    name: cli
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: cli/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Smoke test (map init)
+        run: |
+          node ./bin/map.ts --help
+          node ./bin/map.ts init
+          test -f .map/config.yaml
+          test -f .map/knowledge/patterns.json

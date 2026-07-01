@@ -1,6 +1,10 @@
 {
   "ignorePatterns": [
-    { "pattern": "^https://github.com/OWNER/" }
+    { "pattern": "^https://github.com/OWNER/" },
+    { "pattern": "<" },
+    { "pattern": "/discussions" },
+    { "pattern": "/blob/" },
+    { "pattern": "\\.\\./\\.\\./\\.\\./" }
   ],
   "aliveStatusCodes": [200, 206, 429],
   "retryOn429": true,

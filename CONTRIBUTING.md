@@ -65,7 +65,8 @@ usually includes the category and pattern:
 | `fix/` | Correcting an error in content or code | `fix/memory-summary-typo` |
 | `docs/` | Project-level docs (README, guides, glossary) | `docs/clarify-philosophy` |
 | `refactor/` | Restructuring without changing meaning | `refactor/reference-python-layout` |
-| `chore/` | Tooling, CI, config, housekeeping | `chore/add-link-checker` |
+| `chore/` | Housekeeping, config, dependencies | `chore/bump-deps` |
+| `ci/` | CI/CD workflows and pipelines | `ci/add-cli-workflow` |
 
 > Include the issue number in the branch when helpful: `pattern/retrieval-reranking-42`.
 

@@ -1,0 +1,36 @@
+{
+  "name": "@map/cli",
+  "version": "0.0.0",
+  "description": "MAP CLI — analyze, explain, and recommend AI architecture patterns. Foundation scaffold.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "map": "./bin/map.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "map": "node ./bin/map.ts",
+    "init:demo": "node ./bin/map.ts init",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "ai",
+    "architecture",
+    "patterns",
+    "cli",
+    "rag",
+    "analysis"
+  ],
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0",
+    "vitest": "^2.1.0"
+  }
+}

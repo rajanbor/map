@@ -1,0 +1,8 @@
+{
+  "pattern": "retrieval/chunking",
+  "complexity": 2,
+  "latency": 5,
+  "cost": 5,
+  "accuracyImpact": 5,
+  "productionReadiness": 5
+}

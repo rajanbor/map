@@ -1,0 +1,36 @@
+{
+  "name": "@map/score",
+  "version": "0.0.0",
+  "description": "MAP Score — a compact 1–5 star rating system for AI architecture patterns.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "map-score": "./bin/map-score.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "score": "node ./bin/map-score.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "ai",
+    "architecture",
+    "patterns",
+    "score",
+    "rating"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^4.1.9",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.9"
+  }
+}

@@ -1,0 +1,8 @@
+# pnpm 11 settings for the @map/score package.
+
+# Skip re-verifying/installing deps before each `pnpm run` script.
+verifyDepsBeforeRun: false
+
+# Force a patched vite (a transitive vitest dev dependency) to keep `pnpm audit` clean.
+overrides:
+  vite: ">=6.4.3"

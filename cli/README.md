@@ -35,8 +35,13 @@ Dev tooling (types, tests):
 ```bash
 pnpm install
 pnpm typecheck
-pnpm test
+pnpm test              # run the suite
+pnpm test:coverage     # run with the coverage gate (enforced in CI)
+pnpm audit             # dependency vulnerability check (enforced in CI)
 ```
+
+CI (`.github/workflows/cli.yml`) runs `pnpm audit`, `typecheck`, the coverage-gated
+tests, and a `map init` smoke test on every PR, and is a required check.
 
 ## What `map init` creates
 

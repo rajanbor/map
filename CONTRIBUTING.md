@@ -209,6 +209,16 @@ Rules:
   [Release workflow](.github/workflows/release.yml). Tagging is idempotent: if the tag
   for the current VERSION already exists, nothing happens.
 
+### Release policy: ship functionality, not meta
+
+A release must deliver **user-facing value** — a new pattern, a working CLI command or
+capability, a meaningful docs improvement. Do **not** cut a release that only contains
+project-internal churn (CI tweaks, refactors, governance, formatting). Batch that kind
+of change on `dev` and let it ride along with the next functional release.
+
+Rule of thumb: if a reader or a CLI user wouldn't notice the difference, it's not a
+release on its own. Bump `VERSION` and tag only when the release earns it.
+
 The full picture:
 
 ```

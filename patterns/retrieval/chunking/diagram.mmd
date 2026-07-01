@@ -1,0 +1,12 @@
+%% MAP pattern: retrieval/chunking — architecture diagram (Mermaid source)
+flowchart LR
+    Doc[Document] --> Split[Chunker<br/>size + boundary strategy]
+    Split --> C1[Chunk + metadata]
+    Split --> C2[Chunk + metadata]
+    Split --> C3[Chunk + metadata]
+    C1 --> Emb[Embed]
+    C2 --> Emb
+    C3 --> Emb
+    Emb --> Store[(Vector store)]
+    Query[User query] --> QEmb[Embed] --> Store
+    Store --> TopK[Top-k chunks] --> LLM[Model]

@@ -4,6 +4,8 @@ export {
   MAP_DIR,
   defaultConfig,
   defaultManifest,
+  configFromFacts,
+  manifestFromFacts,
   renderConfig,
   renderManifest,
 } from "./config.ts";

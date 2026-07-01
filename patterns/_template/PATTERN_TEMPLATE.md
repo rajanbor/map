@@ -21,6 +21,33 @@
 
 ---
 
+## Decision
+
+*The 20-second summary so a reader knows whether to keep reading.*
+
+**Use <Pattern> if:**
+
+- ✅ <condition>
+- ✅ <condition>
+
+**Avoid <Pattern> if:**
+
+- ❌ <condition — and what to use instead>
+- ❌ <condition>
+
+## MAP Score
+
+*A 1–5 star rating per dimension. See [MAP Score](../../../map-score/SPEC.md). Higher is
+better, except Complexity (lower is simpler).*
+
+| Dimension | Score | |
+|---|---|---|
+| Complexity | ★★☆☆☆ | 2/5 |
+| Latency | ★★★★★ | 5/5 |
+| Cost | ★★★★★ | 5/5 |
+| Accuracy Impact | ★★★★★ | 5/5 |
+| Production Readiness | ★★★★★ | 5/5 |
+
 ## Problem
 
 *What specific, concrete problem does this pattern solve? State it as the situation a
@@ -87,6 +114,14 @@ accuracy, complexity vs control. A table works well.*
 - …
 - …
 
+## Failure Modes & Anti-patterns
+
+*Common mistakes that break this pattern in practice — the "don't do this" list. Very
+practical; most docs omit it.*
+
+- ❌ <common mistake and why it hurts>
+- ❌ <common mistake>
+
 ## Reference Implementation
 
 *A minimal, readable, framework-agnostic implementation that illustrates the idea.
@@ -112,7 +147,15 @@ setup used. If none, write: "Not yet benchmarked — contributions welcome."*
 
 ## Related Patterns
 
-*Link to complementary, competing, or prerequisite MAP patterns.*
+*Show how this pattern sits in the map: a small Mermaid relationship graph, then a
+navigable list. Keep the graph's edges in sync with `pattern.yaml` (`related:`). GitHub
+strips Mermaid click events, so the list below is what readers click.*
+
+```mermaid
+flowchart LR
+    This((This Pattern)) --> A[Related A]
+    This --> B[Related B]
+```
 
 - [Related Pattern](../../<category>/<slug>/) — how it relates.
 

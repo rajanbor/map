@@ -18,6 +18,7 @@ export * from "./storage/index.ts";
 export * from "./reporting/index.ts";
 export * from "./config/index.ts";
 export * from "./plugins/index.ts";
+export * from "./project/index.ts";
 
 // Composition root
 export { createDefaultServices } from "./services.ts";

@@ -1,0 +1,54 @@
+# Machine-readable metadata for the Chunking pattern.
+# See docs/pattern-contract.md for the contract and map-score/SPEC.md for the score scale.
+id: retrieval/chunking
+name: Chunking
+category: retrieval
+slug: chunking
+maturity: established
+also_known_as:
+  - Text splitting
+  - Document segmentation
+
+summary: >
+  Split documents into smaller, self-contained units so retrieval can find and return the
+  right passage instead of a whole document.
+
+# MAP Score — 1..5 per dimension (see map-score/SPEC.md).
+score:
+  complexity: 2
+  latency: 5
+  cost: 5
+  accuracyImpact: 5
+  productionReadiness: 5
+
+when_to_use:
+  - Building RAG over documents longer than a paragraph or two.
+  - Unstructured or semi-structured text with exploitable internal structure.
+  - You need granular, citable retrieval of a specific passage.
+
+when_not_to_use:
+  - The unit is already the right size (rows, FAQ pairs, short notes).
+  - The task needs the whole document at once (full-doc summarization).
+  - Tabular/relational data — use structured filtering, not text chunking.
+
+related:
+  - retrieval/parent-child-retrieval
+  - retrieval/sentence-window-retrieval
+  - retrieval/contextual-retrieval
+  - retrieval/late-chunking
+  - retrieval/reranking
+  - retrieval/metadata-filtering
+
+references:
+  - https://arxiv.org/abs/2005.11401
+  - https://arxiv.org/abs/2307.03172
+
+# Files present for this pattern (the pattern-contract layer).
+files:
+  - README.md
+  - pattern.yaml
+  - prompt.md
+  - acceptance.md
+  - diagram.mmd
+reference_implementations:
+  - reference/python/retrieval/chunking/

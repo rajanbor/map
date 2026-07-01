@@ -43,6 +43,12 @@ pnpm audit             # dependency vulnerability check (enforced in CI)
 CI (`.github/workflows/cli.yml`) runs `pnpm audit`, `typecheck`, the coverage-gated
 tests, and a `map init` smoke test on every PR, and is a required check.
 
+`map init` **self-initializes**: it detects the project's languages from marker files
+(`package.json`/`tsconfig.json` → TypeScript/JS, `pyproject.toml`/`requirements.txt` →
+Python, `go.mod` → Go, `Cargo.toml` → Rust, `pom.xml`/`build.gradle` → Java) and pre-fills
+`config.yaml` (analyzers, include globs) and `project.yaml` (languages) accordingly. It
+does not analyze source code — that's the future Analyzer.
+
 ## What `map init` creates
 
 ```

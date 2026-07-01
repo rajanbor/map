@@ -1,0 +1,47 @@
+name: MAP Score
+
+# Typecheck, test (with coverage), audit, and smoke-test the map-score package.
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+
+defaults:
+  run:
+    working-directory: map-score
+
+jobs:
+  map-score:
+    name: map-score
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: map-score/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level moderate
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test (with coverage gate)
+        run: pnpm run test:coverage
+
+      - name: Smoke test (render a score)
+        run: node ./bin/map-score.ts scores/retrieval/chunking.json

@@ -139,6 +139,32 @@ Every pattern uses one template so readers always know where to look. The sectio
 See the [template](patterns/_template/PATTERN_TEMPLATE.md) and the
 [Pattern Anatomy guide](docs/pattern-anatomy.md).
 
+## Using MAP with AI coding agents
+
+MAP is written for humans and for AI coding agents (Claude Code, Cursor, Gemini CLI). A
+pattern can be consumed in several ways — see the [pattern file contract](docs/pattern-contract.md):
+
+- Read **`README.md`** to understand the pattern and its trade-offs.
+- Use **`pattern.yaml`** for structured metadata (score, when to use, related patterns).
+- Copy **`prompt.md`** into your coding agent to implement the pattern in your project.
+- Use **`acceptance.md`** as the implementation checklist.
+
+For example, [`patterns/retrieval/chunking/prompt.md`](patterns/retrieval/chunking/prompt.md)
+can be pasted into Claude Code to implement chunking correctly, and
+[`acceptance.md`](patterns/retrieval/chunking/acceptance.md) verifies the result.
+
+MAP does not replace your coding agent — it gives the agent better **architectural context**
+and guardrails, so its decisions are consistent and reviewable. See the
+[Claude Code example](examples/claude-code/).
+
+Future [MAP CLI](cli/) commands may surface this directly (not yet implemented):
+
+```bash
+map explain retrieval.chunking     # what the pattern is and when to use it
+map prompt retrieval.chunking      # print the implementation prompt for an agent
+map apply retrieval.chunking       # scaffold the pattern into the current project
+```
+
 ## Contributing
 
 Contributions are welcome: new patterns, improvements, diagrams, benchmarks,

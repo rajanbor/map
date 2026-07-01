@@ -32,9 +32,18 @@ workflow jobs):
 
 ## Default branch
 
-Set the repository's **default branch to `dev`** so new contributor branches and PRs
-target it automatically. `main` stays the "published" branch that the website (future)
-builds from.
+The repository's **default branch is `main`** (the stable, published branch visitors
+see). Work still integrates on `dev`: contributors branch off `dev` and open PRs into
+`dev`, and `main` only advances via a `dev → main` release merge. When opening a PR,
+set the base to `dev` (the `branch-policy` check rejects non-`dev` heads into `main`).
+
+## Releases and tags
+
+Releases are tagged automatically. The root [`VERSION`](../VERSION) file holds the
+current version; the [Release workflow](workflows/release.yml) runs on push to `main`
+and, when `VERSION` names a tag that doesn't yet exist, creates `vX.Y.Z` and a GitHub
+Release. To cut a release, bump `VERSION` on `dev`, then merge the `dev → main` release
+PR.
 
 ## Suggested settings
 

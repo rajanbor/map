@@ -1,28 +1,30 @@
 # Examples
 
-End-to-end examples that **compose multiple MAP patterns** into a working whole — the
-place to see how patterns fit together, not how one works in isolation.
+Realistic scenarios that show **how teams and AI agents use MAP to make architectural
+decisions** — not code tutorials. Each reads like an Architecture Decision Record (ADR)
+crossed with a solution-design doc: the problem, the constraints, the decisions, the MAP
+patterns chosen, the alternatives rejected, and the reasoning.
 
-Where [`../reference/`](../reference/) shows a single pattern minimally, `examples/`
-shows a realistic slice of a system: e.g. a small RAG service combining *Chunking*,
-*Hybrid Search*, *Reranking*, and *Semantic Cache*.
+The point is to help you think in **patterns and trade-offs**, not frameworks.
 
-## Conventions
+## Scenarios
 
-- One folder per example: `examples/<example-name>/`.
-- Include a `README.md` that lists **which patterns it composes** (with links) and how
-  to run it.
-- Keep dependencies minimal and clearly documented.
-- Favor clarity; an example is a guided tour, not a product.
+| Scenario | What it demonstrates |
+|----------|----------------------|
+| [Customer Support Chatbot](customer-support-chatbot/) | RAG over changing docs, citations, low hallucination, low latency |
+| [Legal Document Assistant](legal-document-assistant/) | Private-document search, tenant isolation, auditability, citations |
+| [Multi-Tenant SaaS](multi-tenant-saas/) | Adding AI to a SaaS without cross-tenant leakage; permission-aware tools |
+| [AI Email Assistant](ai-email-assistant/) | Grounded generation from CRM data with human approval |
+| [Code Review Agent](code-review-agent/) | AI-assisted PR review: context retrieval, tools, evaluation |
+| [Architecture Review](architecture-review/) | How an architect starts a new AI project with MAP |
+| [Claude Code Integration](claude-code/) | How an AI coding agent uses MAP to make and justify decisions |
 
-## Layout
+## How to read an example
 
-```
-examples/
-  <example-name>/
-    README.md          # what it builds, which patterns it uses, how to run
-    ...                # source files
-```
+Each example answers, in order: *what are we building*, *what must be true*, *what
+constrains us*, *what did we decide and why*, *what did we reject and why*. Patterns are
+referenced by name; published ones link to the [catalog](../patterns/), the rest to the
+[Roadmap](../ROADMAP.md).
 
-> No examples yet. Propose one via a **New Pattern**/feature issue once the relevant
-> patterns exist. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+> A note on scope: most patterns referenced here are still on the roadmap. The examples
+> are about the **decisions**, which hold regardless of when each pattern article lands.

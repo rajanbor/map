@@ -38,10 +38,6 @@ pnpm typecheck
 pnpm test
 ```
 
-On first `pnpm install`, pnpm 11 may print an "Ignored build scripts: esbuild"
-warning. It is harmless here (esbuild ships its binary as an optional dependency);
-run `pnpm approve-builds` once if you want to silence it.
-
 ## What `map init` creates
 
 ```

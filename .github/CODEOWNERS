@@ -1,14 +1,11 @@
 # MAP code owners
-# Requests reviews automatically. Replace the placeholders with real
-# GitHub handles/teams once the org is set up.
-#
-# Default owners for everything:
-# *                       @OWNER/maintainers
-#
-# Category maintainers (optional, as the community grows):
-# /patterns/retrieval/    @OWNER/retrieval-maintainers
-# /patterns/security/     @OWNER/security-maintainers
-#
-# Process & templates:
-# /.github/               @OWNER/maintainers
-# /docs/                  @OWNER/maintainers
+# @rajanbor owns everything and is auto-requested to review (and approve) every PR.
+# As the project grows, add more specific owners below the global rule.
+
+# Default owner for everything in the repository:
+*                       @rajanbor
+
+# Examples for later, as maintainers are added:
+# /patterns/retrieval/  @rajanbor
+# /patterns/security/   @rajanbor
+# /.github/             @rajanbor

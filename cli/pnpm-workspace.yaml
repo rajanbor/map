@@ -1,10 +1,10 @@
 # pnpm 11 settings for the @map/cli package.
 
-# Allow esbuild (a transitive vitest dependency) to run its postinstall, which
-# places the platform binary. Without this, pnpm 11 exits non-zero on install.
-allowBuilds:
-  esbuild: true
-
 # Skip re-verifying/installing deps before each `pnpm run` script; the install is
 # already clean and this keeps script startup fast.
 verifyDepsBeforeRun: false
+
+# Force a patched vite (a transitive vitest dev dependency) to clear the Dependabot
+# security alerts (dev-only). Remove once vitest pulls a patched vite itself.
+overrides:
+  vite: ">=6.4.3"

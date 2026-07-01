@@ -64,11 +64,36 @@ export function defaultConfig(): MapConfig {
 }
 
 export function defaultManifest(projectName: string): ProjectManifest {
+  return manifestFromFacts(projectName, []);
+}
+
+/** Build a config from detected project facts (see project/detect.ts). */
+export function configFromFacts(facts: {
+  readonly include: readonly string[];
+  readonly exclude: readonly string[];
+  readonly analyzers: readonly string[];
+}): MapConfig {
+  const base = defaultConfig();
+  return {
+    ...base,
+    analysis: {
+      include: facts.include.length > 0 ? facts.include : base.analysis.include,
+      exclude: facts.exclude.length > 0 ? facts.exclude : base.analysis.exclude,
+      analyzers: facts.analyzers,
+    },
+  };
+}
+
+/** Build a project manifest with detected languages. */
+export function manifestFromFacts(
+  projectName: string,
+  languages: readonly string[],
+): ProjectManifest {
   return {
     name: projectName,
     createdAt: new Date().toISOString(),
     map: { version: CONFIG_SCHEMA_VERSION },
-    languages: [],
+    languages,
   };
 }
 

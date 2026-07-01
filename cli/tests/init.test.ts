@@ -65,4 +65,23 @@ describe("map init", () => {
     const code = await runCli(["nope"], { reporter: silent });
     expect(code).toBe(1);
   });
+
+  it("self-initializes config/manifest from the detected project", async () => {
+    const dir = await tempProject();
+    try {
+      await writeFile(join(dir, "package.json"), "{}");
+      await writeFile(join(dir, "tsconfig.json"), "{}");
+
+      await runCli(["init"], { cwd: dir, reporter: silent });
+
+      const manifest = await readFile(join(dir, ".map/project.yaml"), "utf8");
+      expect(manifest).toContain("typescript");
+
+      const config = await readFile(join(dir, ".map/config.yaml"), "utf8");
+      expect(config).toContain("analyzers:");
+      expect(config).toContain("typescript");
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
 });

@@ -147,7 +147,15 @@ setup used. If none, write: "Not yet benchmarked — contributions welcome."*
 
 ## Related Patterns
 
-*Link to complementary, competing, or prerequisite MAP patterns.*
+*Show how this pattern sits in the map: a small Mermaid relationship graph, then a
+navigable list. Keep the graph's edges in sync with `pattern.yaml` (`related:`). GitHub
+strips Mermaid click events, so the list below is what readers click.*
+
+```mermaid
+flowchart LR
+    This((This Pattern)) --> A[Related A]
+    This --> B[Related B]
+```
 
 - [Related Pattern](../../<category>/<slug>/) — how it relates.
 

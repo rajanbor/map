@@ -240,6 +240,19 @@ Contributions with a reproducible setup are welcome.
 
 ## Related Patterns
 
+How Chunking sits in the wider map of retrieval patterns:
+
+```mermaid
+flowchart LR
+    Emb[Embeddings] --> Chunk((Chunking))
+    Chunk --> Meta[Metadata Filtering]
+    Chunk --> Rerank[Reranking] --> RAG[RAG]
+    Chunk --> PC[Parent-Child Retrieval]
+    Chunk --> SW[Sentence-Window Retrieval]
+    Chunk -. refine .-> CR[Contextual Retrieval]
+    Chunk -. refine .-> LC[Late Chunking]
+```
+
 Planned MAP patterns that build on or pair with Chunking (see the [Roadmap](../../../ROADMAP.md)):
 
 - **Parent-Child (Small-to-Big) Retrieval** — retrieve small chunks, return their larger parent.
@@ -248,7 +261,12 @@ Planned MAP patterns that build on or pair with Chunking (see the [Roadmap](../.
 - **Reranking** — reorder retrieved chunks with a stronger model.
 - **Metadata Filtering** — narrow retrieval using the metadata attached during chunking.
 
-Browse the [Retrieval category](../) for the full list.
+Browse the [Retrieval category](../) for the full list. The machine-readable edges live in
+[`pattern.yaml`](pattern.yaml) (`related:`), which will one day power an interactive map of
+the whole catalog.
+
+<sub>Note: GitHub renders the graph but strips click events, so use the links above to
+navigate.</sub>
 
 ## References
 

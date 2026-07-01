@@ -24,7 +24,7 @@ for and how to write it well. The machine-readable starting point is
 | **Failure Modes & Anti-patterns** | The "don't do this" list — common mistakes that break the pattern. | ❌ bullets; very practical. Most docs omit this. |
 | **Reference Implementation** | Minimal, framework-agnostic code illustrating the idea. | Keep it small; link to `reference/` for fuller code. |
 | **Production Variants** | How the pattern appears in real systems and at scale. | Name techniques neutrally; note common modifications. |
-| **Related Patterns** | Complementary, competing, or prerequisite patterns. | Link within MAP. |
+| **Related Patterns** | Complementary, competing, or prerequisite patterns. | A small Mermaid relationship graph, then a navigable list. Keep edges in sync with `pattern.yaml` `related:`. |
 | **References** | Primary sources: papers, docs, talks. | Numbered list; prefer originals. |
 
 ## Optional section

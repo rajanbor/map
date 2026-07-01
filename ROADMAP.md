@@ -31,7 +31,7 @@ solidify before the catalog scales.
 
 Getting the right context in front of the model.
 
-- ⬜ Chunking Strategies
+- ✅ [Chunking](patterns/retrieval/chunking/)
 - ⬜ Parent-Child (Small-to-Big) Retrieval
 - ⬜ Hybrid Search (dense + sparse)
 - ⬜ Metadata Filtering

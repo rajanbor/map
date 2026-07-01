@@ -186,14 +186,16 @@ A pattern PR is ready to merge when:
 
 ## Release process
 
-`main` is the published catalog. It only changes through a release, and a release is
-one thing: merging `dev` into `main`.
+`main` is the default, published branch. It only changes through a release, and a
+release is one thing: merging `dev` into `main`. Each release is tagged.
 
 ```
 1. Work is reviewed and merged into `dev` (via PRs, as above).
-2. When `dev` is ready to publish, a maintainer opens a release PR: dev -> main.
-3. CI (PR Policy, Link Check) must pass. The head branch must be `dev`.
-4. A maintainer merges the release PR. `main` now matches the released state.
+2. Bump the root VERSION file on `dev` (e.g. 0.1.0 -> 0.2.0) via a chore PR.
+3. When `dev` is ready to publish, a maintainer opens a release PR: dev -> main.
+4. Required checks must pass. The head branch must be `dev`.
+5. A maintainer merges the release PR. `main` now matches the released state.
+6. The Release workflow reads VERSION and creates the `vX.Y.Z` tag + GitHub Release.
 ```
 
 Rules:
@@ -203,6 +205,9 @@ Rules:
 - No one pushes to `main` directly. Branch protection enforces this; the
   [PR Policy workflow](.github/workflows/pr-policy.yml) rejects any PR into `main`
   whose head branch is not `dev`.
+- Releases are versioned by the root [`VERSION`](VERSION) file and tagged by the
+  [Release workflow](.github/workflows/release.yml). Tagging is idempotent: if the tag
+  for the current VERSION already exists, nothing happens.
 
 The full picture:
 

@@ -42,7 +42,8 @@ MAP uses a simple two-trunk model:
 
 **All contributor branches are created from `dev` and all pull requests target
 `dev`.** Direct pushes to `main` and `dev` are not allowed; changes arrive through
-pull requests.
+pull requests. **`main` never receives changes directly** — it only advances when
+`dev` is merged into it during a release (see [Release process](#release-process)).
 
 ```
 main   ●────────────────●───────────────●   (releases only)
@@ -179,6 +180,36 @@ A pattern PR is ready to merge when:
    (don't force-push over review history unless asked).
 5. A maintainer merges (squash or rebase) into `dev`.
 6. Your work ships to `main` in the next release promotion.
+
+---
+
+## Release process
+
+`main` is the published catalog. It only changes through a release, and a release is
+one thing: merging `dev` into `main`.
+
+```
+1. Work is reviewed and merged into `dev` (via PRs, as above).
+2. When `dev` is ready to publish, a maintainer opens a release PR: dev -> main.
+3. CI (PR Policy, Link Check) must pass. The head branch must be `dev`.
+4. A maintainer merges the release PR. `main` now matches the released state.
+```
+
+Rules:
+
+- **No change reaches `main` except through a `dev -> main` release merge.**
+- No feature, fix, or pattern branch is ever merged into `main` directly.
+- No one pushes to `main` directly. Branch protection enforces this; the
+  [PR Policy workflow](.github/workflows/pr-policy.yml) rejects any PR into `main`
+  whose head branch is not `dev`.
+
+The full picture:
+
+```
+issue  ->  branch (feature/fix/pattern/docs)  ->  commits  ->  PR into dev  ->  merge to dev
+                                                                                     |
+                                                                        release PR:  dev -> main
+```
 
 ---
 

@@ -6,6 +6,7 @@
  */
 
 export type ConceptId =
+  | "llm"
   | "embeddings"
   | "vector_search"
   | "rag"
@@ -13,7 +14,9 @@ export type ConceptId =
   | "streaming"
   | "memory"
   | "model_routing"
-  | "prompt_guards";
+  | "prompt_guards"
+  | "evaluation"
+  | "observability";
 
 export interface ConceptDefinition {
   readonly id: ConceptId;
@@ -26,6 +29,7 @@ export interface ConceptDefinition {
  * ids so detection stays consistent across languages.
  */
 export const CONCEPTS: readonly ConceptDefinition[] = [
+  { id: "llm", name: "LLM Usage", description: "Direct calls to a large language model API." },
   { id: "embeddings", name: "Embeddings", description: "Text or data converted to vectors." },
   { id: "vector_search", name: "Vector Search", description: "Similarity search over embeddings." },
   { id: "rag", name: "RAG", description: "Retrieval-augmented generation." },
@@ -34,4 +38,6 @@ export const CONCEPTS: readonly ConceptDefinition[] = [
   { id: "memory", name: "Memory", description: "State kept across turns or sessions." },
   { id: "model_routing", name: "Model Routing", description: "Requests routed across models." },
   { id: "prompt_guards", name: "Prompt Guards", description: "Input/output guardrails and injection defenses." },
+  { id: "evaluation", name: "Evaluation", description: "Automated quality measurement of model outputs." },
+  { id: "observability", name: "Observability", description: "Tracing, logging, and cost tracking of AI calls." },
 ];

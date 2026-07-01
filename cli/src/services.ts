@@ -14,9 +14,9 @@ import type { KnowledgeBase } from "./knowledge/index.ts";
 import { InMemoryKnowledgeBase } from "./knowledge/index.ts";
 import type { PatternGraph } from "./graph/index.ts";
 import { InMemoryPatternGraph } from "./graph/index.ts";
-import { AnalyzerRegistry } from "./analyzer/index.ts";
+import { AnalyzerRegistry, DependencyManifestAnalyzer } from "./analyzer/index.ts";
 import type { Recommender } from "./recommendation/index.ts";
-import { NullRecommender } from "./recommendation/index.ts";
+import { RuleBasedRecommender } from "./recommendation/index.ts";
 
 export interface Services {
   readonly storage: Storage;
@@ -30,11 +30,18 @@ export interface Services {
 export type ServiceOverrides = Partial<Services>;
 
 export function createDefaultServices(overrides: ServiceOverrides = {}): Services {
+  const storage = overrides.storage ?? new FileSystemStorage();
   return {
-    storage: overrides.storage ?? new FileSystemStorage(),
+    storage,
     knowledgeBase: overrides.knowledgeBase ?? new InMemoryKnowledgeBase(),
     graph: overrides.graph ?? new InMemoryPatternGraph(),
-    analyzers: overrides.analyzers ?? new AnalyzerRegistry(),
-    recommender: overrides.recommender ?? new NullRecommender(),
+    analyzers: overrides.analyzers ?? defaultAnalyzers(storage),
+    recommender: overrides.recommender ?? new RuleBasedRecommender(),
   };
+}
+
+function defaultAnalyzers(storage: Storage): AnalyzerRegistry {
+  const registry = new AnalyzerRegistry();
+  registry.register(new DependencyManifestAnalyzer(storage));
+  return registry;
 }

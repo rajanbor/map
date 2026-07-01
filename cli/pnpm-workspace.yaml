@@ -1,7 +1,10 @@
-# pnpm 11 settings for this package.
-# Allow esbuild (a vitest dependency) to run its install script.
-onlyBuiltDependencies:
-  - esbuild
-# Don't re-verify/instal deps before each `pnpm run` script. The esbuild binary
-# works without its optional build step, so the check is a false negative here.
+# pnpm 11 settings for the @map/cli package.
+
+# Allow esbuild (a transitive vitest dependency) to run its postinstall, which
+# places the platform binary. Without this, pnpm 11 exits non-zero on install.
+allowBuilds:
+  esbuild: true
+
+# Skip re-verifying/installing deps before each `pnpm run` script; the install is
+# already clean and this keeps script startup fast.
 verifyDepsBeforeRun: false

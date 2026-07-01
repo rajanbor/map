@@ -30,10 +30,10 @@ jobs:
           fi
           if [ "$BASE" = "dev" ]; then
             case "$HEAD" in
-              feature/*|fix/*|pattern/*|docs/*|refactor/*|chore/*)
+              feature/*|fix/*|pattern/*|docs/*|refactor/*|chore/*|ci/*)
                 echo "OK: typed branch '$HEAD' -> dev." ;;
               *)
-                echo "::error::Branch '$HEAD' must be prefixed with feature/, fix/, pattern/, docs/, refactor/, or chore/. See CONTRIBUTING.md."
+                echo "::error::Branch '$HEAD' must be prefixed with feature/, fix/, pattern/, docs/, refactor/, chore/, or ci/. See CONTRIBUTING.md."
                 exit 1 ;;
             esac
           fi

@@ -1,0 +1,30 @@
+title: "[Architecture] "
+labels: ["discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask an AI architecture question — the kind MAP exists to answer
+        (e.g. "RAG vs fine-tuning?", "which retrieval strategy?"). Good answers link to
+        MAP patterns. If a solid answer has no pattern to link, that's a signal to open a
+        **New Pattern** issue.
+  - type: textarea
+    id: question
+    attributes:
+      label: The decision you're facing
+      description: Describe the system and the choice, with enough context to answer.
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Latency, cost, scale, data sensitivity, team size, etc.
+    validations:
+      required: false
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you've considered
+    validations:
+      required: false

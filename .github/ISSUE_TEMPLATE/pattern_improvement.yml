@@ -1,0 +1,41 @@
+name: "✏️ Pattern Improvement"
+description: Improve an existing pattern — clarity, diagrams, production variants, benchmarks, or corrections.
+title: "[Improve] <pattern name>: <short summary>"
+labels: ["type: improvement", "status: needs-triage"]
+body:
+  - type: input
+    id: pattern
+    attributes:
+      label: Which pattern?
+      description: Path or name, e.g. patterns/retrieval/reranking
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type of improvement
+      options:
+        - Clarity / wording
+        - Diagram
+        - Add / improve trade-offs
+        - Add production variant
+        - Add benchmark
+        - Correction (factual error)
+        - Reference implementation
+        - Links / related patterns
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: What should change and why?
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I checked this isn't already reported.
+          required: true

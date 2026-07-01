@@ -1,0 +1,32 @@
+name: "🐞 Bug / Error"
+description: Report a broken link, incorrect code, rendering issue, or other defect.
+title: "[Bug] <short summary>"
+labels: ["type: bug", "status: needs-triage"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What's wrong?
+      description: Describe the problem and where it is (file path or URL).
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Browser, renderer, or steps to reproduce (for code/links).
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues.
+          required: true

@@ -1,0 +1,102 @@
+# MAP GitHub Labels proposal
+# ---------------------------
+# Apply with a tool like github-label-sync or EndBug/label-sync:
+#   npx github-label-sync --labels .github/labels.yml <owner>/<repo>
+# Labels are grouped by prefix so the issue list stays scannable.
+
+# ── Type ─────────────────────────────────────────────────────────────
+- name: "type: pattern"
+  color: "0e8a16"
+  description: A new pattern article
+- name: "type: improvement"
+  color: "1d76db"
+  description: Improvement to an existing pattern
+- name: "type: bug"
+  color: "d73a4a"
+  description: A defect — broken link, wrong code, rendering issue
+- name: "type: feature"
+  color: "a2eeef"
+  description: Non-pattern feature — website, tooling, templates
+- name: "type: docs"
+  color: "5319e7"
+  description: Project-level documentation
+- name: "type: chore"
+  color: "cfd3d7"
+  description: Tooling, CI, config, housekeeping
+
+# ── Category (mirrors patterns/) ─────────────────────────────────────
+- name: "category: retrieval"
+  color: "fbca04"
+  description: Retrieval patterns
+- name: "category: memory"
+  color: "fbca04"
+  description: Memory patterns
+- name: "category: agents"
+  color: "fbca04"
+  description: Agent patterns
+- name: "category: security"
+  color: "fbca04"
+  description: Security patterns
+- name: "category: context"
+  color: "fbca04"
+  description: Context management patterns
+- name: "category: evaluation"
+  color: "fbca04"
+  description: Evaluation patterns
+- name: "category: performance"
+  color: "fbca04"
+  description: Performance patterns
+- name: "category: routing"
+  color: "fbca04"
+  description: Routing patterns
+- name: "category: tool-calling"
+  color: "fbca04"
+  description: Tool calling patterns
+- name: "category: observability"
+  color: "fbca04"
+  description: Observability patterns
+
+# ── Status ───────────────────────────────────────────────────────────
+- name: "status: needs-triage"
+  color: "ededed"
+  description: Awaiting maintainer review
+- name: "status: approved"
+  color: "0e8a16"
+  description: Approved — ready to be worked on
+- name: "status: in-progress"
+  color: "1d76db"
+  description: Someone is actively working on it
+- name: "status: needs-revision"
+  color: "e99695"
+  description: Changes requested before it can proceed
+- name: "status: blocked"
+  color: "b60205"
+  description: Blocked by another issue or decision
+
+# ── Priority ─────────────────────────────────────────────────────────
+- name: "priority: high"
+  color: "b60205"
+  description: High-leverage / cornerstone pattern
+- name: "priority: medium"
+  color: "d93f0b"
+  description: Normal priority
+- name: "priority: low"
+  color: "fef2c0"
+  description: Nice to have
+
+# ── Community ─────────────────────────────────────────────────────────
+- name: "good first issue"
+  color: "7057ff"
+  description: Good entry point for new contributors
+- name: "help wanted"
+  color: "008672"
+  description: Maintainers would love help here
+- name: "discussion"
+  color: "d4c5f9"
+  description: Needs discussion before action
+- name: "duplicate"
+  color: "cccccc"
+  description: Already tracked elsewhere
+- name: "wontfix"
+  color: "ffffff"
+  description: Out of scope for MAP

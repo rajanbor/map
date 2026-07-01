@@ -1,0 +1,14 @@
+# MAP code owners
+# Requests reviews automatically. Replace the placeholders with real
+# GitHub handles/teams once the org is set up.
+#
+# Default owners for everything:
+# *                       @OWNER/maintainers
+#
+# Category maintainers (optional, as the community grows):
+# /patterns/retrieval/    @OWNER/retrieval-maintainers
+# /patterns/security/     @OWNER/security-maintainers
+#
+# Process & templates:
+# /.github/               @OWNER/maintainers
+# /docs/                  @OWNER/maintainers

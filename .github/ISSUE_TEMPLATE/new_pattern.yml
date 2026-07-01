@@ -1,0 +1,75 @@
+name: "📐 New Pattern"
+description: Propose a new AI Engineering pattern to add to the MAP catalog.
+title: "[Pattern] <pattern name>"
+labels: ["type: pattern", "status: needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a pattern! Every pattern starts as an issue so we can
+        confirm scope and category before you invest effort. A maintainer will assign
+        the issue once it's approved. See [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).
+  - type: input
+    id: name
+    attributes:
+      label: Pattern name
+      placeholder: e.g. Reranking
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Retrieval
+        - Memory
+        - Agents
+        - Security
+        - Context Management
+        - Evaluation
+        - Performance
+        - Routing
+        - Tool Calling
+        - Observability
+        - Other / not sure
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem it solves
+      description: What concrete situation does a developer face when they reach for this pattern?
+    validations:
+      required: true
+  - type: textarea
+    id: when
+    attributes:
+      label: When to use / When NOT to use (rough)
+      description: A first cut at the decision guidance. It's fine to be incomplete.
+    validations:
+      required: false
+  - type: input
+    id: roadmap
+    attributes:
+      label: Is it on the Roadmap?
+      description: Link or name the ROADMAP.md entry, or note that it's new.
+    validations:
+      required: false
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Papers, posts, or docs that describe this pattern (prefer primary sources).
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues and the Roadmap and this pattern isn't already covered.
+          required: true
+        - label: This describes an architectural pattern (not a prompt trick or a specific library feature).
+          required: true
+        - label: I'm willing to help write it (or I'm flagging it for others).
+          required: false

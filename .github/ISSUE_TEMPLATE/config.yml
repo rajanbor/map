@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Questions & Ideas (Discussions)
+    url: https://github.com/OWNER/map/discussions
+    about: Ask questions, propose directions, or discuss trade-offs. Not sure if something is a pattern? Start here.
+  - name: 📓 Contribution Guide
+    url: https://github.com/OWNER/map/blob/main/CONTRIBUTING.md
+    about: Read the Issue → Branch → Commits → PR → dev workflow before opening a PR.
+  - name: 🔒 Report a security concern
+    url: https://github.com/OWNER/map/security/advisories/new
+    about: Privately report a vulnerability or sensitive concern.

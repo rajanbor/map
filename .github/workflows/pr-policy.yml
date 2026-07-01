@@ -1,0 +1,54 @@
+name: PR Policy
+
+# Enforces MAP's contribution workflow:
+#   • PRs into `main` may only come from `dev` (release promotions).
+#   • PRs into `dev` should come from a typed branch (feature/fix/pattern/docs/refactor/chore).
+# See CONTRIBUTING.md.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [main, dev]
+
+jobs:
+  branch-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce base/head branch rules
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: |
+          echo "PR: $HEAD -> $BASE"
+          if [ "$BASE" = "main" ]; then
+            if [ "$HEAD" != "dev" ]; then
+              echo "::error::PRs into 'main' may only come from 'dev'. Open your PR against 'dev' instead."
+              exit 1
+            fi
+            echo "OK: release promotion dev -> main."
+            exit 0
+          fi
+          if [ "$BASE" = "dev" ]; then
+            case "$HEAD" in
+              feature/*|fix/*|pattern/*|docs/*|refactor/*|chore/*)
+                echo "OK: typed branch '$HEAD' -> dev." ;;
+              *)
+                echo "::error::Branch '$HEAD' must be prefixed with feature/, fix/, pattern/, docs/, refactor/, or chore/. See CONTRIBUTING.md."
+                exit 1 ;;
+            esac
+          fi
+
+  link-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require a linked issue in the PR body
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # No orphan PRs: body must reference an issue (Closes #N / Refs #N / #N).
+          if echo "$BODY" | grep -Eiq '(close[sd]?|fix(e[sd])?|resolve[sd]?|refs?)[[:space:]]*#[0-9]+|#[0-9]+'; then
+            echo "OK: linked issue found."
+          else
+            echo "::error::This PR must link an issue (e.g. 'Closes #123'). No orphan PRs — see CONTRIBUTING.md."
+            exit 1
+          fi

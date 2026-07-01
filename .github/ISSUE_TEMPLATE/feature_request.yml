@@ -1,0 +1,33 @@
+name: "💡 Feature / Tooling"
+description: Suggest a non-pattern improvement — website, tooling, templates, CI, structure.
+title: "[Feature] <short summary>"
+labels: ["type: feature", "status: needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What's missing or awkward today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight
+      options:
+        - label: This is not a pattern proposal (I'd use the "New Pattern" template for that).
+          required: true
+        - label: I searched existing issues and Discussions.
+          required: true

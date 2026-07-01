@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/map-logo.png" alt="MAP logo" width="160" />
+</p>
+
 # MAP — Missing AI Patterns
 
 An open, framework-agnostic knowledge base of AI Engineering patterns.

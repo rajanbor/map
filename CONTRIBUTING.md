@@ -10,6 +10,11 @@ maintainable. Please read it before opening your first pull request.
 
 By participating, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
+**Licensing of contributions:** by contributing you agree that your work is released
+under the project's licenses — **code under [MIT](LICENSE), content (patterns/docs)
+under [CC BY 4.0](LICENSE-CONTENT)** (inbound = outbound). You keep copyright to your
+contributions; content is credited via attribution. See [LICENSING.md](LICENSING.md).
+
 ---
 
 ## TL;DR — the contribution flow

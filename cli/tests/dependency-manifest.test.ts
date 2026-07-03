@@ -9,6 +9,9 @@ function fakeStorage(files: Record<string, string>): Storage {
       return path in files;
     },
     async ensureDir() {},
+    async listDirs() {
+      return [];
+    },
     async readFile(path) {
       const contents = files[path];
       if (contents === undefined) throw new Error(`ENOENT: ${path}`);

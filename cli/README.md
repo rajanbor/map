@@ -13,7 +13,11 @@ The product vision lives in [`../future/cli.md`](../future/cli.md).
   (`package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`, `Cargo.toml`).
 - ✅ `map recommend [path]` — rule-based recommendations: which MAP patterns the
   detected architecture is missing, with priorities and rationale.
-- 🏗️ `graph`, `doctor`, `explain`, `diff`, `patterns` — scaffolded stubs that print what they will do.
+- ✅ `map patterns [text]` — list and search the pattern catalog (written patterns
+  merged with the roadmap); filter with `--category=<cat>` and `--status=<status>`.
+- ✅ `map doctor` — health checks: Node version, `.map/` workspace integrity, report
+  validity, catalog availability, and rule-table consistency. Exits non-zero on problems.
+- 🏗️ `graph`, `explain`, `diff` — scaffolded stubs that print what they will do.
 - 🧩 Core modules exist as interfaces with small default implementations and clear `TODO`s.
 
 ## Requirements
@@ -31,6 +35,12 @@ node ./bin/map.ts init --force  # overwrite existing files
 
 node ./bin/map.ts analyze ~/code/my-app     # what AI architecture is in there?
 node ./bin/map.ts recommend ~/code/my-app   # what MAP patterns is it missing?
+
+node ./bin/map.ts patterns                        # the whole catalog
+node ./bin/map.ts patterns cache                  # search by text
+node ./bin/map.ts patterns --category=security    # one category
+node ./bin/map.ts patterns --status=published     # only written patterns
+node ./bin/map.ts doctor                          # is everything healthy?
 
 # or via pnpm scripts
 pnpm map -- --help
@@ -85,6 +95,19 @@ Tool Access + Tool Budget; no evaluation signal → Golden Dataset + LLM-as-Judg
 tracing → Tracing. Recommendations reference roadmap pattern ids
 (`category/name`, see [`../ROADMAP.md`](../ROADMAP.md)).
 
+`map patterns` is backed by the **pattern catalog** (Module 1,
+[`src/knowledge/repo-pattern-catalog.ts`](src/knowledge/repo-pattern-catalog.ts)):
+it merges the written patterns (`patterns/<category>/<slug>/pattern.yaml`) with the
+target catalog parsed from [`../ROADMAP.md`](../ROADMAP.md), so every entry carries a
+status (✅ published · 🟡 in progress · ⬜ planned). The ids shown are the same ids
+`map recommend` emits.
+
+`map doctor` verifies the environment (Node >= 22), the `.map/` workspace (config,
+manifest, knowledge db, analysis report all present and parseable), that the pattern
+catalog loads, and that every id in the recommendation rule table resolves in the
+catalog — so a typo in `rules.ts` or a renamed roadmap entry fails fast (and in CI,
+since doctor exits non-zero on problems).
+
 ## What `map init` creates
 
 ```
@@ -110,7 +133,8 @@ bin/map.ts                 executable entry
 src/
   domain/                  pure types: Pattern (Module 1), relationships (Module 4),
                            concepts, analysis, recommendations. No I/O.
-  knowledge/               Module 1 — Knowledge Base (interface + in-memory impl)
+  knowledge/               Module 1 — Knowledge Base (pattern catalog: ROADMAP.md +
+                           pattern.yaml loader; KnowledgeBase interface + in-memory impl)
   graph/                   Module 4 — Pattern graph (interface + in-memory impl)
   analyzer/                Module 2 — Analyzer (dependency-manifest analyzer + signal table)
   recommendation/          Module 3 — Recommendation engine (rule-based recommender + rule table)
@@ -123,7 +147,7 @@ src/
     command.ts             Command contract
     command-registry.ts    lookup + plugin extension point
     runner.ts              argv parsing (Node's parseArgs) + dispatch
-    commands/              init, analyze, recommend (working) + planned stubs
+    commands/              init, analyze, recommend, patterns, doctor (working) + planned stubs
 ```
 
 Design rules:
@@ -140,10 +164,11 @@ provider plugins. See [`src/plugins/plugin.ts`](src/plugins/plugin.ts).
 
 ## What's next (TODOs)
 
-- **Module 1:** a Markdown/JSON knowledge loader that reads `patterns/` and `.map/knowledge/`.
+- **Module 1:** grow the catalog into a full document loader — parse pattern README
+  sections into `Pattern` objects and read `.map/knowledge/patterns.json` overrides.
 - **Module 2:** source-code analyzers (TypeScript, Python) that detect concepts from
   imports and call sites, deepening what the manifest analyzer finds.
 - **Module 3:** back the recommender with the pattern graph (prerequisites, conflicts).
-- **Module 5:** implement `doctor`, `patterns`, then `explain` → `diff`.
+- **Module 5:** implement `explain` (catalog + knowledge base) → `diff`.
 
 Grep for `TODO(` to find the extension points.

@@ -43,6 +43,30 @@ describe("map patterns", () => {
     expect(output).not.toContain("performance/prompt-cache");
   });
 
+  it("shows the MAP Score star line for published patterns", async () => {
+    const reporter = capture();
+    const code = await runCli(["patterns", "--status=published"], { reporter });
+
+    expect(code).toBe(0);
+    const output = reporter.lines.join("\n");
+    expect(output).toContain("Complexity ★★☆☆☆");
+    expect(output).toContain("Readiness ★★★★★");
+  });
+
+  it("emits machine-readable JSON with --json", async () => {
+    const reporter = capture();
+    const code = await runCli(["patterns", "chunking", "--status=published", "--json"], {
+      reporter,
+    });
+
+    expect(code).toBe(0);
+    const parsed = JSON.parse(reporter.lines.join("\n"));
+    const chunking = parsed.find((e: { id: string }) => e.id === "retrieval/chunking");
+    expect(chunking.status).toBe("published");
+    expect(chunking.score.latency).toBe(5);
+    expect(chunking.related).toContain("retrieval/reranking");
+  });
+
   it("rejects an unknown status", async () => {
     const reporter = capture();
     const code = await runCli(["patterns", "--status=nope"], { reporter });

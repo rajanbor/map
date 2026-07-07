@@ -119,8 +119,38 @@ describe("parsePatternYamlHeader", () => {
   });
 
   it("does not mistake nested keys for top-level scalars", () => {
-    const header = parsePatternYamlHeader("score:\n  complexity: 2\n");
-    expect(header).toEqual({});
+    const header = parsePatternYamlHeader("summary: s\n  complexity: 2\n");
+    expect(header).toEqual({ summary: "s" });
+  });
+
+  it("reads a complete score block and the related list", () => {
+    const header = parsePatternYamlHeader(
+      [
+        "id: retrieval/chunking",
+        "score:",
+        "  complexity: 2",
+        "  latency: 5",
+        "  cost: 5",
+        "  accuracyImpact: 5",
+        "  productionReadiness: 5 # comment",
+        "related:",
+        "  - retrieval/reranking",
+        "  - retrieval/late-chunking",
+      ].join("\n"),
+    );
+    expect(header.score).toEqual({
+      complexity: 2,
+      latency: 5,
+      cost: 5,
+      accuracyImpact: 5,
+      productionReadiness: 5,
+    });
+    expect(header.related).toEqual(["retrieval/reranking", "retrieval/late-chunking"]);
+  });
+
+  it("omits an incomplete or out-of-range score", () => {
+    expect(parsePatternYamlHeader("score:\n  complexity: 2\n").score).toBeUndefined();
+    expect(parsePatternYamlHeader("score:\n  complexity: 9\n").score).toBeUndefined();
   });
 });
 

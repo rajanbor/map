@@ -102,6 +102,8 @@ export class RepoPatternCatalog implements PatternCatalog {
           status,
           ...(header.summary !== undefined && { summary: header.summary }),
           ...(header.maturity !== undefined && { maturity: header.maturity }),
+          ...(header.score !== undefined && { score: header.score }),
+          ...(header.related !== undefined && { related: header.related }),
         });
       }
     }

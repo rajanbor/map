@@ -14,7 +14,9 @@ The product vision lives in [`../future/cli.md`](../future/cli.md).
 - ✅ `map recommend [path]` — rule-based recommendations: which MAP patterns the
   detected architecture is missing, with priorities and rationale.
 - ✅ `map patterns [text]` — list and search the pattern catalog (written patterns
-  merged with the roadmap); filter with `--category=<cat>` and `--status=<status>`.
+  merged with the roadmap); filter with `--category=<cat>` and `--status=<status>`;
+  published patterns show their MAP Score star line, and `--json` emits machine-readable
+  output for scripts and agents.
 - ✅ `map doctor` — health checks: Node version, `.map/` workspace integrity, report
   validity, catalog availability, and rule-table consistency. Exits non-zero on problems.
 - 🏗️ `graph`, `explain`, `diff` — scaffolded stubs that print what they will do.
@@ -40,6 +42,7 @@ node ./bin/map.ts patterns                        # the whole catalog
 node ./bin/map.ts patterns cache                  # search by text
 node ./bin/map.ts patterns --category=security    # one category
 node ./bin/map.ts patterns --status=published     # only written patterns
+node ./bin/map.ts patterns --json                 # machine-readable output
 node ./bin/map.ts doctor                          # is everything healthy?
 
 # or via pnpm scripts

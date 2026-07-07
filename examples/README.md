@@ -18,6 +18,7 @@ The point is to help you think in **patterns and trade-offs**, not frameworks.
 | [Code Review Agent](code-review-agent/) | AI-assisted PR review: context retrieval, tools, evaluation |
 | [Architecture Review](architecture-review/) | How an architect starts a new AI project with MAP |
 | [Claude Code Integration](claude-code/) | How an AI coding agent uses MAP to make and justify decisions |
+| [POC: Pattern Catalog](poc-pattern-catalog/) | Runnable: consuming the catalog via `map patterns` and the catalog API |
 
 ## How to read an example
 

@@ -13,6 +13,15 @@ import type { PatternId, PatternCategory } from "./pattern.ts";
 /** Mirrors the roadmap legend: ⬜ Planned · 🟡 In progress · ✅ Published. */
 export type CatalogStatus = "published" | "in-progress" | "planned";
 
+/** The five MAP Score dimensions, 1..5 stars each (see map-score/SPEC.md). */
+export interface MapScore {
+  readonly complexity: number;
+  readonly latency: number;
+  readonly cost: number;
+  readonly accuracyImpact: number;
+  readonly productionReadiness: number;
+}
+
 export interface CatalogEntry {
   readonly id: PatternId;
   readonly name: string;
@@ -22,4 +31,8 @@ export interface CatalogEntry {
   readonly summary?: string;
   /** Maturity from pattern.yaml (e.g. "established"); present when written. */
   readonly maturity?: string;
+  /** MAP Score from pattern.yaml; present when written and complete. */
+  readonly score?: MapScore;
+  /** Related pattern ids from pattern.yaml; present when written. */
+  readonly related?: readonly PatternId[];
 }

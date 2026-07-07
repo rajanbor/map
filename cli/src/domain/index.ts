@@ -8,7 +8,7 @@ export type {
   TradeOff,
   ImplementationReference,
 } from "./pattern.ts";
-export type { CatalogEntry, CatalogStatus } from "./catalog.ts";
+export type { CatalogEntry, CatalogStatus, MapScore } from "./catalog.ts";
 export type { Relationship, RelationshipType } from "./relationship.ts";
 export type { ConceptId, ConceptDefinition } from "./concept.ts";
 export { CONCEPTS } from "./concept.ts";

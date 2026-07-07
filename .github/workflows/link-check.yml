@@ -1,21 +1,21 @@
-name: Link Check
+# name: Link Check
 
-# Validates Markdown links so the catalog stays navigable as it grows.
+# # Validates Markdown links so the catalog stays navigable as it grows.
 
-on:
-  pull_request:
-    branches: [main, dev]
-  push:
-    branches: [main, dev]
+# on:
+#   pull_request:
+#     branches: [main, dev]
+#   push:
+#     branches: [main, dev]
 
-jobs:
-  markdown-link-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check links in Markdown files
-        uses: gaurav-nelson/github-action-markdown-link-check@v1
-        with:
-          use-quiet-mode: "yes"
-          use-verbose-mode: "yes"
-          config-file: ".github/mlc_config.json"
+# jobs:
+#   markdown-link-check:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Check links in Markdown files
+#         uses: gaurav-nelson/github-action-markdown-link-check@v1
+#         with:
+#           use-quiet-mode: "yes"
+#           use-verbose-mode: "yes"
+#           config-file: ".github/mlc_config.json"

@@ -1,34 +1,29 @@
 /**
- * Registers the built-in command set. `init` is implemented; the rest are scaffolded
- * placeholders that map to the future modules in `future/cli.md`.
+ * Registers the built-in command set. `init`, `analyze`, `recommend`, `patterns`,
+ * and `doctor` are implemented; the rest are scaffolded placeholders that map to
+ * the future modules in `future/cli.md`.
  */
 
 import type { CommandRegistry } from "../command-registry.ts";
 import { initCommand } from "./init.ts";
+import { analyzeCommand } from "./analyze.ts";
+import { recommendCommand } from "./recommend.ts";
+import { patternsCommand } from "./patterns.ts";
+import { doctorCommand } from "./doctor.ts";
 import { planned } from "./planned.ts";
 
 export function registerBuiltinCommands(registry: CommandRegistry): void {
   registry.register(initCommand);
+  registry.register(analyzeCommand);
+  registry.register(recommendCommand);
+  registry.register(patternsCommand);
+  registry.register(doctorCommand);
 
-  registry.register(
-    planned({
-      name: "analyze",
-      summary: "Scan the project and detect AI architecture concepts.",
-      module: "Module 2 — Analyzer",
-    }),
-  );
   registry.register(
     planned({
       name: "graph",
       summary: "Build and inspect the pattern graph.",
       module: "Module 4 — Graph",
-    }),
-  );
-  registry.register(
-    planned({
-      name: "doctor",
-      summary: "Check the .map workspace and environment for problems.",
-      module: "Module 5 — CLI",
     }),
   );
   registry.register(
@@ -43,20 +38,6 @@ export function registerBuiltinCommands(registry: CommandRegistry): void {
       name: "diff",
       summary: "Compare architecture between two revisions.",
       module: "Module 2 — Analyzer",
-    }),
-  );
-  registry.register(
-    planned({
-      name: "recommend",
-      summary: "Recommend patterns missing from the detected architecture.",
-      module: "Module 3 — Recommendation Engine",
-    }),
-  );
-  registry.register(
-    planned({
-      name: "patterns",
-      summary: "List and search the MAP pattern catalog.",
-      module: "Module 1 — Knowledge Base",
     }),
   );
 }

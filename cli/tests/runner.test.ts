@@ -93,7 +93,7 @@ describe("runCli", () => {
 
   it("runs the built-in planned commands and warns", async () => {
     const { reporter, lines } = memoryReporter();
-    const code = await runCli(["analyze"], { reporter });
+    const code = await runCli(["graph"], { reporter });
     expect(code).toBe(0);
     expect(lines.join("\n")).toContain("planned");
   });

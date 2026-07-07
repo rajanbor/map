@@ -2,7 +2,7 @@
  * Filesystem implementation of `Storage` using only Node built-ins (no dependencies).
  */
 
-import { mkdir, readFile, writeFile, access } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile, access } from "node:fs/promises";
 import { constants } from "node:fs";
 import type { Storage } from "./storage.ts";
 
@@ -18,6 +18,15 @@ export class FileSystemStorage implements Storage {
 
   async ensureDir(path: string): Promise<void> {
     await mkdir(path, { recursive: true });
+  }
+
+  async listDirs(path: string): Promise<readonly string[]> {
+    try {
+      const entries = await readdir(path, { withFileTypes: true });
+      return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+    } catch {
+      return [];
+    }
   }
 
   async readFile(path: string): Promise<string> {

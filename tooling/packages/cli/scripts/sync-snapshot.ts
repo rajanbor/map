@@ -11,8 +11,10 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { writeFile, readFile } from "node:fs/promises";
+import { writeFile, readFile, mkdtemp, rm } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { join, dirname } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 const packageDir = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -21,11 +23,21 @@ const DEFAULT_REGISTRY_URL =
   "https://github.com/rajanbor/map/releases/latest/download/registry.json";
 
 const mapRepo = process.env["MAP_REPO"];
+const check = process.argv.includes("--check");
+let generatedPath = snapshotPath;
+let temporaryDirectory: string | undefined;
 
 if (mapRepo !== undefined && mapRepo !== "") {
+  const libraryRoot = existsSync(join(mapRepo, "library", "scripts", "build-registry.ts"))
+    ? join(mapRepo, "library")
+    : mapRepo;
+  if (check) {
+    temporaryDirectory = await mkdtemp(join(tmpdir(), "map-registry-check-"));
+    generatedPath = join(temporaryDirectory, "registry.json");
+  }
   execFileSync(
     "node",
-    [join(mapRepo, "scripts", "build-registry.ts"), "--out", snapshotPath],
+    [join(libraryRoot, "scripts", "build-registry.ts"), "--out", generatedPath],
     { stdio: "inherit" },
   );
 } else {
@@ -40,10 +52,30 @@ if (mapRepo !== undefined && mapRepo !== "") {
   }
   const body = await response.text();
   JSON.parse(body); // fail fast on a corrupt download
-  await writeFile(snapshotPath, body);
+  if (check) {
+    generatedPath = snapshotPath;
+  } else {
+    await writeFile(snapshotPath, body);
+  }
+}
+
+if (check) {
+  const expected = normalized(JSON.parse(await readFile(generatedPath, "utf8")));
+  const actual = normalized(JSON.parse(await readFile(snapshotPath, "utf8")));
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    process.stderr.write("snapshot is stale; run with MAP_REPO=<repo-root> without --check\n");
+    if (temporaryDirectory !== undefined) await rm(temporaryDirectory, { recursive: true, force: true });
+    process.exit(1);
+  }
 }
 
 const { patterns } = JSON.parse(await readFile(snapshotPath, "utf8")) as {
   patterns: unknown[];
 };
-process.stdout.write(`snapshot updated: ${patterns.length} patterns.\n`);
+process.stdout.write(`snapshot ${check ? "current" : "updated"}: ${patterns.length} patterns.\n`);
+if (temporaryDirectory !== undefined) await rm(temporaryDirectory, { recursive: true, force: true });
+
+function normalized(value: Record<string, unknown>): Record<string, unknown> {
+  const { generatedAt: _generatedAt, ...rest } = value;
+  return rest;
+}

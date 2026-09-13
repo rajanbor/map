@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "kind": "map.scan-result",
+  "root": "/workspace/map/tooling",
+  "detectedAt": "2026-09-13T13:08:19.022Z",
+  "analyzers": ["dependency-manifest"],
+  "inspected": ["package.json"],
+  "concepts": [],
+  "limitations": [
+    "Dependency manifests indicate declared packages, not whether or how code uses them.",
+    "The MVP scanner does not inspect source code, runtime behavior, nested workspaces, or secret values."
+  ]
+}

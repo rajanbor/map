@@ -72,8 +72,9 @@ git pull --ff-only
 ```bash
 cd your-project
 map init
-map analyze
-map recommend
+map scan --json
+map suggest
+map search retrieval
 map optimize --save
 map sync
 ```
@@ -98,9 +99,9 @@ existing files:
 ## One workflow, every agent
 
 ```text
-project code ──▶ map analyze ──▶ detected AI architecture
+project code ──▶ map scan ────▶ detected AI architecture
                                       │
-MAP library ──▶ map recommend ──▶ missing patterns
+MAP library ──▶ map suggest ──▶ patterns to review
                                       │
                               map add / edit .map/
                                       │
@@ -114,13 +115,20 @@ MAP library ──▶ map recommend ──▶ missing patterns
 | Command | Result |
 |---|---|
 | `map init` | Creates the `.map/` workspace and detects the project shape. |
-| `map analyze` | Finds AI-related dependencies and architecture signals. |
-| `map recommend` | Suggests missing patterns with evidence and priority. |
-| `map patterns [query]` | Searches the local pattern catalog. |
+| `map scan [path] [--json]` | Finds static AI architecture signals, evidence, certainty, and limits. |
+| `map suggest [path] [--json]` | Suggests review candidates with triggers, rationale, and priority. |
+| `map list [--json]` | Lists the local pattern catalog. |
+| `map search [query] [--json]` | Searches patterns by ID, name, or summary. |
+| `map show <pattern-id> [--json]` | Shows one pattern and its decision guidance. |
+| `map graph [pattern-id] [--json]` | Inspects the catalog as typed relationships. |
 | `map add <pattern-id>` | Adds a pattern prompt, metadata, and acceptance criteria. |
+| `map validate [--json]` | Validates the project manifest and adopted pattern integrity. |
 | `map optimize --check` | Measures context and enforces the configured token budget. |
 | `map sync` | Generates instructions for supported AI coding assistants. |
 | `map doctor` | Checks the workspace, registry, compiler, and references. |
+
+The original `analyze`, `recommend`, `patterns`, and `explain` commands remain
+supported as compatible names.
 
 ## What is inside this repository?
 
@@ -140,6 +148,9 @@ and verifiable acceptance criteria.
 
 - [Getting started](docs/getting-started.md)
 - [Project structure](docs/project-structure.md)
+- [Product vision and MVP](docs/project/VISION.md)
+- [System architecture](docs/architecture/README.md)
+- [Machine-readable specifications](docs/specifications/)
 - [Pattern library](library/README.md)
 - [Human- and AI-readable schemas](library/docs/schemas/README.md)
 - [MAP Standard RFC](library/rfcs/0001-map-standard.md)

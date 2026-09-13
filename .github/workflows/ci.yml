@@ -39,6 +39,10 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - name: Check the bundled registry snapshot
+        env:
+          MAP_REPO: ${{ github.workspace }}
+        run: node packages/cli/scripts/sync-snapshot.ts --check
       - name: Test the GitHub installer
         working-directory: .
         run: |

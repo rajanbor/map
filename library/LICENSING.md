@@ -6,7 +6,7 @@ MAP uses two licenses so it's easy to build on, while authorship stays credited.
 
 | What | License | You can | You must |
 |------|---------|---------|----------|
-| **Code** — `reference/`, `examples/`, `scripts/` (the CLI lives in [missing-ai-patterns/cli](https://github.com/rajanbor/map/tree/main/tooling)) | [MIT](LICENSE) | Use, copy, modify, fork, ship commercially | Keep the copyright notice |
+| **Code** — `reference/`, `examples/`, `scripts/`, and [`tooling/`](../tooling/) | [MIT](LICENSE) | Use, copy, modify, fork, ship commercially | Keep the copyright notice |
 | **Content** — `patterns/`, `docs/`, prose, diagrams | [CC BY 4.0](LICENSE-CONTENT) | Use, share, adapt, even commercially | **Give attribution** to MAP / the author |
 | **Name & brand** — "MAP", "Missing AI Patterns", logos | Reserved (not licensed) | — | Use a different name for forks |
 

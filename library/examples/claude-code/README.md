@@ -61,9 +61,9 @@ flowchart TD
 As the [MAP CLI](https://github.com/rajanbor/map/tree/main/tooling) grows, an agent could pull structured pattern context directly:
 
 ```bash
-map explain retrieval.chunking      # what the pattern is and when to use it
-map prompt retrieval.chunking       # an implementation prompt for a coding agent
-map recommend                       # patterns missing from the detected architecture
+map show retrieval/chunking         # what the pattern is and when to use it
+map add retrieval/chunking          # prompt + acceptance criteria for the project
+map suggest                         # patterns worth reviewing for the detected architecture
 ```
 
 This turns MAP from documentation an agent *reads* into an architecture layer an agent

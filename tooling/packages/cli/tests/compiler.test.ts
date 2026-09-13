@@ -63,6 +63,16 @@ describe("parseYaml", () => {
       priority: "high",
     });
   });
+
+  it("parses folded and literal block strings without consuming following fields", () => {
+    expect(
+      parseYaml("summary: >\n  first line\n  second line\nscore:\n  cost: 2\nnote: |-\n  alpha\n  beta"),
+    ).toEqual({
+      summary: "first line second line\n",
+      score: { cost: 2 },
+      note: "alpha\nbeta",
+    });
+  });
 });
 
 describe("parseFrontmatter", () => {

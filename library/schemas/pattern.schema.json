@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://map.dev/schemas/pattern.schema.json",
+  "title": "MAP Pattern Metadata v1",
+  "description": "Machine-readable identity, decision guidance, evidence, and relationships for a MAP pattern or anti-pattern.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "category", "summary", "score", "when_to_use", "when_not_to_use"],
+  "properties": {
+    "id": { "$ref": "#/$defs/patternId" },
+    "kind": { "enum": ["pattern", "anti-pattern"], "default": "pattern" },
+    "name": { "type": "string", "minLength": 1 },
+    "category": { "$ref": "#/$defs/category" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "status": { "enum": ["planned", "in-progress", "published", "deprecated", "renamed"] },
+    "maturity": { "enum": ["emerging", "established", "declining"] },
+    "also_known_as": { "$ref": "#/$defs/nonEmptyStrings" },
+    "summary": { "type": "string", "minLength": 20 },
+    "score": { "$ref": "#/$defs/score" },
+    "when_to_use": { "$ref": "#/$defs/nonEmptyStrings" },
+    "when_not_to_use": { "$ref": "#/$defs/nonEmptyStrings" },
+    "related": {
+      "description": "Legacy compatibility relation. Consumers normalize each target to works_with.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/patternId" },
+      "uniqueItems": true
+    },
+    "relations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/relation" },
+      "uniqueItems": true
+    },
+    "references": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^https://" },
+      "uniqueItems": true
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence" },
+      "uniqueItems": true
+    },
+    "files": { "$ref": "#/$defs/nonEmptyStrings" },
+    "reference_implementations": { "$ref": "#/$defs/nonEmptyStrings" }
+  },
+  "$defs": {
+    "patternId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*/[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "category": {
+      "enum": ["retrieval", "memory", "agents", "security", "context", "evaluation", "performance", "routing", "tool-calling", "observability"]
+    },
+    "nonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complexity", "latency", "cost", "accuracyImpact", "productionReadiness"],
+      "properties": {
+        "complexity": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "latency": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "cost": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "accuracyImpact": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "productionReadiness": { "type": "integer", "minimum": 1, "maximum": 5 }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "target"],
+      "properties": {
+        "type": { "enum": ["depends_on", "works_with", "alternative_to", "extends", "conflicts_with", "solves"] },
+        "target": { "$ref": "#/$defs/patternId" },
+        "note": { "type": "string", "minLength": 1 },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": { "type": "string", "pattern": "^https://" },
+        "title": { "type": "string", "minLength": 1 },
+        "accessed": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

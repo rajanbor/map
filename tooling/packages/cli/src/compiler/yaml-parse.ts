@@ -3,9 +3,9 @@
  *
  * The repo ships a dependency-free YAML serializer (config/yaml.ts); this is its
  * read-side counterpart. It covers exactly what MAP needs to read back: nested
- * maps, block sequences (of scalars or maps), and scalar values. It is deliberately
- * not a general-purpose YAML implementation — no anchors, flow collections, multi-line
- * scalars, or tags.
+ * maps, block sequences (of scalars or maps), scalar values, and the folded/literal
+ * block strings used by MAP metadata. It is deliberately not a general-purpose YAML
+ * implementation — no anchors, complex keys, or tags.
  */
 
 export type YamlNode =
@@ -72,7 +72,16 @@ function parseMapping(lines: Line[], start: number, indent: number): [YamlNode, 
     const key = unquote(line.text.slice(0, colon).trim());
     const rest = line.text.slice(colon + 1).trim();
     i += 1;
-    if (rest !== "") {
+    if ([">", ">-", "|", "|-"].includes(rest)) {
+      const block: string[] = [];
+      while (i < lines.length && lines[i]!.indent > indent) {
+        block.push(lines[i]!.text);
+        i += 1;
+      }
+      const folded = rest.startsWith(">");
+      const keepTrailingNewline = !rest.endsWith("-");
+      obj[key] = block.join(folded ? " " : "\n") + (keepTrailingNewline ? "\n" : "");
+    } else if (rest !== "") {
       obj[key] = parseScalar(rest);
     } else if (i < lines.length && lines[i]!.indent > indent) {
       const [child, next] = parseBlock(lines, i, lines[i]!.indent);

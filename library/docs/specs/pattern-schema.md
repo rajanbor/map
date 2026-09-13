@@ -2,13 +2,13 @@
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Implemented (Pattern Schema v1) |
 | **Issue** | [#77](https://github.com/rajanbor/map/issues/77) |
 | **Owner** | @rajanbor |
 
 ## Summary
 
-Formalize `pattern.yaml` as a JSON Schema (`schemas/pattern.schema.json`) and enforce it
+`pattern.yaml` is formalized as JSON Schema (`schemas/pattern.schema.json`) and enforced
 in the registry build. Today validation is implicit in what `scripts/build-registry.ts`
 happens to read; a wrong key or a misspelled list silently disappears from the registry
 instead of failing the PR. The [pattern contract](../pattern-contract.md) promised a
@@ -47,19 +47,19 @@ The registry build already fails on score ranges, category mismatches, and dangl
 - The informal shape in [`pattern-contract.md`](../pattern-contract.md) is replaced by
   a link to the schema.
 
-## Implementation plan
+## Implementation
 
-1. Add `schemas/pattern.schema.json`; verify all published `pattern.yaml` files pass.
-2. Wire structural validation into `scripts/build-registry.ts` (`--check` fails on
-   violations); add malformed-fixture tests for the builder.
-3. Update `pattern-contract.md` and the pattern template to point at the schema.
-4. Attach the schema to releases alongside `registry.json` (release workflow).
+The schema, valid examples, and malformed fixtures live under `library/schemas/`.
+`scripts/validate-schemas.ts` validates the fixtures and every published
+`pattern.yaml`, including directory identity, required files, duplicate IDs, and
+relationship targets. The release workflow already attaches every `*.schema.json`
+file alongside the registry.
 
 ## Acceptance criteria
 
-- [ ] A PR with a misspelled `pattern.yaml` key fails the `registry` check with a message naming the file and key.
-- [ ] All published patterns validate unchanged.
-- [ ] The schema is published with each release and referenced from `pattern-contract.md`.
+- [x] A PR with a misspelled `pattern.yaml` key fails the `registry` check with a message naming the file and key.
+- [x] All published patterns validate unchanged.
+- [x] The schema is published with each release and referenced from the schema guide.
 
 ## Compatibility & risks
 

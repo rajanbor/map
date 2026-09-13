@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1, "kind": "map.recommendation-result", "scan": { "root": "/workspace", "detectedAt": "2026-09-13T00:00:00Z" },
+  "recommendations": [{ "pattern": "security/prompt-injection-defense", "priority": "urgent", "rationale": "Review it.", "triggeredBy": ["rag"] }],
+  "limitations": ["Static signals only."]
+}

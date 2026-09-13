@@ -12,8 +12,16 @@ export type { CatalogEntry, CatalogStatus, MapScore } from "./catalog.ts";
 export type { Relationship, RelationshipType } from "./relationship.ts";
 export type { ConceptId, ConceptDefinition } from "./concept.ts";
 export { CONCEPTS } from "./concept.ts";
-export type { DetectedConcept, DetectedArchitecture } from "./analysis.ts";
+export type {
+  DetectedConcept,
+  DetectedArchitecture,
+  DetectionCertainty,
+  ScanDetectedConcept,
+  ScanResult,
+} from "./analysis.ts";
+export { certaintyForConfidence } from "./analysis.ts";
 export type {
   Recommendation,
   RecommendationPriority,
+  RecommendationResult,
 } from "./recommendation.ts";

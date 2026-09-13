@@ -90,6 +90,20 @@ export const patternsCommand: Command = {
   },
 };
 
+export const listCommand: Command = {
+  ...patternsCommand,
+  name: "list",
+  summary: "List patterns in the MAP catalog.",
+  usage: "map list [--category <category>] [--status <status>] [--json]",
+};
+
+export const searchCommand: Command = {
+  ...patternsCommand,
+  name: "search",
+  summary: "Search patterns by id, name, or summary.",
+  usage: "map search [text] [--category <category>] [--status <status>] [--json]",
+};
+
 function optionalString(value: string | boolean | undefined): string | undefined {
   return typeof value === "string" && value !== "" ? value : undefined;
 }

@@ -23,6 +23,8 @@ const CONTRACTS: readonly Contract[] = [
   { name: "project", schema: "project.schema.json", fixtures: "project" },
   { name: "decision", schema: "decision.schema.json", fixtures: "decision" },
   { name: "pattern", schema: "pattern.schema.json", fixtures: "pattern" },
+  { name: "scan-result", schema: "scan-result.schema.json", fixtures: "scan-result" },
+  { name: "recommendation-result", schema: "recommendation-result.schema.json", fixtures: "recommendation-result" },
 ];
 
 const failures: string[] = [];

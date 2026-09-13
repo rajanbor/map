@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://map.dev/schemas/scan-result.schema.json",
+  "title": "MAP Scan Result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kind", "root", "detectedAt", "analyzers", "inspected", "concepts", "limitations"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "kind": { "const": "map.scan-result" },
+    "root": { "type": "string", "minLength": 1 },
+    "detectedAt": { "type": "string", "format": "date-time" },
+    "analyzers": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "inspected": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "concepts": { "type": "array", "items": { "$ref": "#/$defs/concept" } },
+    "limitations": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+  },
+  "$defs": {
+    "concept": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["concept", "confidence", "certainty", "evidence"],
+      "properties": {
+        "concept": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "certainty": { "enum": ["detected", "likely", "unknown"] },
+        "evidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+      }
+    }
+  }
+}

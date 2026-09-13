@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "kind": "map.recommendation-result",
+  "scan": { "root": "/workspace/example", "detectedAt": "2026-09-13T00:00:00.000Z" },
+  "recommendations": [{ "pattern": "security/prompt-injection-defense", "priority": "high", "rationale": "Retrieved text crosses a trust boundary.", "triggeredBy": ["rag"] }],
+  "limitations": ["Suggestions are review candidates, not proof of absence."]
+}

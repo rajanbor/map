@@ -21,3 +21,25 @@ export interface DetectedArchitecture {
   readonly detectedAt: string;
   readonly concepts: readonly DetectedConcept[];
 }
+
+export type DetectionCertainty = "detected" | "likely" | "unknown";
+
+export interface ScanDetectedConcept extends DetectedConcept {
+  readonly certainty: DetectionCertainty;
+}
+
+/** Stable JSON envelope emitted by `map scan --json`. */
+export interface ScanResult extends Omit<DetectedArchitecture, "concepts"> {
+  readonly schemaVersion: 1;
+  readonly kind: "map.scan-result";
+  readonly analyzers: readonly string[];
+  readonly inspected: readonly string[];
+  readonly concepts: readonly ScanDetectedConcept[];
+  readonly limitations: readonly string[];
+}
+
+export function certaintyForConfidence(confidence: number): DetectionCertainty {
+  if (confidence >= 0.85) return "detected";
+  if (confidence >= 0.6) return "likely";
+  return "unknown";
+}

@@ -6,7 +6,7 @@ status: accepted
 date: 2026-09-13
 owners: [rajanbor]
 tags: [mcp, adapters, security]
-priority: medium
+priority: normal
 targets: [agents, claude, gemini, cursor, copilot]
 ---
 
@@ -38,4 +38,3 @@ threat model, path boundary, preview, and human approval policy.
 - No MCP dependency exists in core packages.
 - Future MCP results validate against the same public contracts as CLI JSON.
 - Security review precedes any write-capable MCP tool.
-

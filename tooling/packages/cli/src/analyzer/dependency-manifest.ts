@@ -28,6 +28,14 @@ interface ManifestSpec {
   readonly parse: (contents: string) => readonly string[];
 }
 
+export const SUPPORTED_MANIFEST_FILES = [
+  "package.json",
+  "requirements.txt",
+  "pyproject.toml",
+  "go.mod",
+  "Cargo.toml",
+] as const;
+
 const MANIFESTS: readonly ManifestSpec[] = [
   { file: "package.json", ecosystem: "npm", parse: parsePackageJson },
   { file: "requirements.txt", ecosystem: "pypi", parse: parseRequirementsTxt },

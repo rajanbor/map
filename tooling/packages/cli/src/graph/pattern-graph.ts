@@ -7,6 +7,7 @@
  */
 
 import type {
+  CatalogEntry,
   PatternId,
   Relationship,
   RelationshipType,
@@ -20,6 +21,20 @@ export interface PatternGraph {
   edges(): readonly Relationship[];
   /** Outgoing edges from `id`, optionally filtered by relationship type. */
   neighbors(id: PatternId, type?: RelationshipType): readonly Relationship[];
+}
+
+/** Build the v1 graph projection; legacy `related` edges mean `works_with`. */
+export function buildPatternGraph(entries: readonly CatalogEntry[]): PatternGraph {
+  const graph = new InMemoryPatternGraph();
+  for (const entry of [...entries].sort((a, b) => a.id.localeCompare(b.id))) {
+    graph.addNode(entry.id);
+  }
+  for (const entry of [...entries].sort((a, b) => a.id.localeCompare(b.id))) {
+    for (const target of [...(entry.related ?? [])].sort()) {
+      graph.addEdge({ from: entry.id, type: "works_with", to: target });
+    }
+  }
+  return graph;
 }
 
 export class InMemoryPatternGraph implements PatternGraph {

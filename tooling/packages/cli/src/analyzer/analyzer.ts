@@ -1,13 +1,12 @@
 /**
- * Module 2 — Analyzer (interfaces only for now).
+ * Module 2 — Analyzer ports and registry.
  *
  * An `Analyzer` inspects a project and reports the AI-architecture concepts it finds.
  * Analyzers are pluggable and language-scoped (TypeScript, Python, Go, Java, ...).
  * The registry picks the analyzers that apply to a given project.
  *
- * TODO(module-2): implement a first analyzer (e.g. TypeScript) that detects
- * embeddings, vector search, RAG, tool calling, streaming, memory, model routing,
- * and prompt guards. Keep detection rules data-driven so new signals are cheap.
+ * The dependency-manifest implementation is the deterministic baseline. Additional
+ * source or runtime analyzers implement this port without changing domain results.
  */
 
 import type { DetectedConcept } from "../domain/index.ts";

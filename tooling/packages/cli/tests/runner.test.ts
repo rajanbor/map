@@ -85,10 +85,10 @@ describe("runCli", () => {
     expect(reporter.lines.join("\n")).toContain("does a thing");
   });
 
-  it("runs the built-in planned commands and warns", async () => {
+  it("runs the built-in graph command", async () => {
     const reporter = capture();
     const code = await runCli(["graph"], { reporter });
     expect(code).toBe(0);
-    expect(reporter.lines.join("\n")).toContain("planned");
+    expect(reporter.lines.join("\n")).toContain("96 node(s)");
   });
 });

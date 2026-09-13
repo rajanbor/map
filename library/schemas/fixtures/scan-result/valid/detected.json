@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "kind": "map.scan-result",
+  "root": "/workspace/example",
+  "detectedAt": "2026-09-13T00:00:00.000Z",
+  "analyzers": ["dependency-manifest"],
+  "inspected": ["package.json"],
+  "concepts": [{ "concept": "tool_calling", "confidence": 0.95, "certainty": "detected", "evidence": ["package.json: ai"] }],
+  "limitations": ["Dependency declarations do not prove runtime use."]
+}

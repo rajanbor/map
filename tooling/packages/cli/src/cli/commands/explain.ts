@@ -17,6 +17,7 @@ export const explainCommand: Command = {
   summary: "Explain a pattern: what it is, when to use it, trade-offs.",
   usage: "map explain <pattern-id>",
   args: "<pattern-id>",
+  options: [{ flags: "--json", description: "machine-readable pattern metadata" }],
 
   async run(ctx: CommandContext): Promise<CommandResult> {
     const { reporter, services } = ctx;
@@ -45,9 +46,21 @@ export const explainCommand: Command = {
       return FAILED;
     }
 
-    render(ctx, entry);
+    if (ctx.flags["json"] === true) {
+      const { files: _files, ...metadata } = entry;
+      reporter.info(JSON.stringify(metadata, null, 2));
+    } else {
+      render(ctx, entry);
+    }
     return OK;
   },
+};
+
+export const showCommand: Command = {
+  ...explainCommand,
+  name: "show",
+  summary: "Show one pattern, its trade-offs, score, and relationships.",
+  usage: "map show <pattern-id> [--json]",
 };
 
 function render(ctx: CommandContext, entry: CatalogEntry): void {

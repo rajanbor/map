@@ -10,12 +10,18 @@ import { resolve } from "node:path";
 import type { Command, CommandContext, CommandResult } from "../command.ts";
 import { OK } from "../command.ts";
 import { detectArchitecture } from "./analyze.ts";
+import type { RecommendationResult } from "../../domain/index.ts";
+
+const RECOMMENDATION_LIMITATIONS = [
+  "Recommendations infer review candidates from static signals; they do not prove a pattern is absent or suitable.",
+] as const;
 
 export const recommendCommand: Command = {
   name: "recommend",
   summary: "Recommend patterns missing from the detected architecture.",
   usage: "map recommend [path]",
   args: "[path]",
+  options: [{ flags: "--json", description: "machine-readable recommendation result" }],
 
   async run(ctx: CommandContext): Promise<CommandResult> {
     const { reporter, services } = ctx;
@@ -23,15 +29,25 @@ export const recommendCommand: Command = {
 
     const architecture = await detectArchitecture(root, services);
     if (architecture === undefined || architecture.concepts.length === 0) {
+      if (ctx.flags["json"] === true) {
+        const detectedAt = architecture?.detectedAt ?? new Date().toISOString();
+        reporter.info(JSON.stringify(result(root, detectedAt, []), null, 2));
+        return OK;
+      }
       reporter.info("No AI usage detected — nothing to recommend.");
       reporter.info("Run 'map analyze' to see what MAP looks for.");
       return OK;
     }
 
+    const recommendations = await services.recommender.recommend(architecture);
+    if (ctx.flags["json"] === true) {
+      reporter.info(
+        JSON.stringify(result(root, architecture.detectedAt, recommendations), null, 2),
+      );
+      return OK;
+    }
     const detected = architecture.concepts.map((c) => c.concept).join(", ");
     reporter.info(`Detected: ${detected}`);
-
-    const recommendations = await services.recommender.recommend(architecture);
     if (recommendations.length === 0) {
       reporter.success("No gaps found for the detected architecture.");
       return OK;
@@ -50,4 +66,25 @@ export const recommendCommand: Command = {
     );
     return OK;
   },
+};
+
+function result(
+  root: string,
+  detectedAt: string,
+  recommendations: RecommendationResult["recommendations"],
+): RecommendationResult {
+  return {
+    schemaVersion: 1,
+    kind: "map.recommendation-result",
+    scan: { root, detectedAt },
+    recommendations,
+    limitations: RECOMMENDATION_LIMITATIONS,
+  };
+}
+
+export const suggestCommand: Command = {
+  ...recommendCommand,
+  name: "suggest",
+  summary: "Suggest evidence-backed patterns for the detected architecture.",
+  usage: "map suggest [path] [--json]",
 };

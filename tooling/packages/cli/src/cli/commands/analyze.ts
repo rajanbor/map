@@ -11,10 +11,11 @@ import { join, resolve } from "node:path";
 import type { Command, CommandContext, CommandResult } from "../command.ts";
 import { OK } from "../command.ts";
 import type { AnalyzerContext } from "../../analyzer/index.ts";
-import { mergeConcepts } from "../../analyzer/index.ts";
+import { mergeConcepts, SUPPORTED_MANIFEST_FILES } from "../../analyzer/index.ts";
 import { MAP_DIR } from "../../config/index.ts";
 import { CONCEPTS } from "../../domain/index.ts";
-import type { DetectedArchitecture, DetectedConcept } from "../../domain/index.ts";
+import { certaintyForConfidence } from "../../domain/index.ts";
+import type { DetectedConcept, ScanResult } from "../../domain/index.ts";
 import type { Services } from "../../services.ts";
 import type { Reporter } from "../../reporting/index.ts";
 
@@ -23,20 +24,26 @@ export const analyzeCommand: Command = {
   summary: "Scan the project and detect AI architecture concepts.",
   usage: "map analyze [path]",
   args: "[path]",
+  options: [{ flags: "--json", description: "machine-readable scan result" }],
 
   async run(ctx: CommandContext): Promise<CommandResult> {
     const { reporter, services } = ctx;
     const root = resolve(ctx.cwd, ctx.args[0] ?? ".");
 
-    const architecture = await detectArchitecture(root, services);
-    if (architecture === undefined) {
+    const architecture = await scanArchitecture(root, services);
+    if (ctx.flags["json"] === true) {
+      reporter.info(JSON.stringify(architecture, null, 2));
+      await saveReport(architecture, services, reporter, false);
+      return OK;
+    }
+    if (architecture.analyzers.length === 0) {
       reporter.warn(`No applicable analyzers for ${root}.`);
       reporter.info("Supported signals: dependency manifests (package.json, requirements.txt, pyproject.toml, go.mod, Cargo.toml).");
       return OK;
     }
 
     reportConcepts(architecture.concepts, reporter);
-    await saveReport(architecture, services, reporter);
+    await saveReport(architecture, services, reporter, true);
 
     return OK;
   },
@@ -49,20 +56,45 @@ export const analyzeCommand: Command = {
 export async function detectArchitecture(
   root: string,
   services: Services,
-): Promise<DetectedArchitecture | undefined> {
+): Promise<ScanResult | undefined> {
+  const result = await scanArchitecture(root, services);
+  return result.analyzers.length === 0 ? undefined : result;
+}
+
+export async function scanArchitecture(
+  root: string,
+  services: Services,
+): Promise<ScanResult> {
   const context: AnalyzerContext = { root };
   const applicable = await services.analyzers.applicable(context);
-  if (applicable.length === 0) return undefined;
 
   const detections: DetectedConcept[] = [];
   for (const analyzer of applicable) {
     detections.push(...(await analyzer.analyze(context)));
   }
 
+  const inspected: string[] = [];
+  for (const file of SUPPORTED_MANIFEST_FILES) {
+    if (await services.storage.exists(join(root, file))) inspected.push(file);
+  }
+
   return {
+    schemaVersion: 1,
+    kind: "map.scan-result",
     root,
     detectedAt: new Date().toISOString(),
-    concepts: mergeConcepts(detections),
+    analyzers: applicable.map((analyzer) => analyzer.id).sort(),
+    inspected: inspected.sort(),
+    concepts: mergeConcepts(detections).map((detection) => ({
+      ...detection,
+      certainty: certaintyForConfidence(detection.confidence),
+    })),
+    limitations: [
+      applicable.length === 0
+        ? "No analyzer supports the files at this project root; architecture is unknown."
+        : "Dependency manifests indicate declared packages, not whether or how code uses them.",
+      "The MVP scanner does not inspect source code, runtime behavior, nested workspaces, or secret values.",
+    ],
   };
 }
 
@@ -81,14 +113,16 @@ function reportConcepts(
       CONCEPTS.find((concept) => concept.id === detection.concept)?.name ??
       detection.concept;
     const confidence = `${Math.round(detection.confidence * 100)}%`;
-    reporter.info(`  ${name} (${confidence}) — ${detection.evidence.join(", ")}`);
+    const certainty = "certainty" in detection ? `, ${String(detection.certainty)}` : "";
+    reporter.info(`  ${name} (${confidence}${certainty}) — ${detection.evidence.join(", ")}`);
   }
 }
 
 async function saveReport(
-  architecture: DetectedArchitecture,
+  architecture: ScanResult,
   services: Services,
   reporter: Reporter,
+  announce: boolean,
 ): Promise<void> {
   const { storage } = services;
   const mapDir = join(architecture.root, MAP_DIR);
@@ -99,5 +133,12 @@ async function saveReport(
   await storage.writeFile(path, `${JSON.stringify(architecture, null, 2)}\n`, {
     overwrite: true,
   });
-  reporter.success(`Report saved to ${path}`);
+  if (announce) reporter.success(`Report saved to ${path}`);
 }
+
+export const scanCommand: Command = {
+  ...analyzeCommand,
+  name: "scan",
+  summary: "Scan the project and return evidence-backed AI architecture signals.",
+  usage: "map scan [path] [--json]",
+};

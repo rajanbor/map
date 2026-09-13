@@ -16,3 +16,14 @@ export interface Recommendation {
   /** The detected concepts that triggered this recommendation. */
   readonly triggeredBy: readonly ConceptId[];
 }
+
+export interface RecommendationResult {
+  readonly schemaVersion: 1;
+  readonly kind: "map.recommendation-result";
+  readonly scan: {
+    readonly root: string;
+    readonly detectedAt: string;
+  };
+  readonly recommendations: readonly Recommendation[];
+  readonly limitations: readonly string[];
+}

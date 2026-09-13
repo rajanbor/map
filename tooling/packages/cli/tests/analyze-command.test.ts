@@ -61,6 +61,7 @@ describe("map analyze", () => {
         {
           concept: "vector_search",
           confidence: 0.9,
+          certainty: "detected",
           evidence: ["package.json: chromadb"],
         },
       ]);

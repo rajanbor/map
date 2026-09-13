@@ -100,6 +100,139 @@ Generated files such as `AGENTS.md` are projections. Authors edit `.map/`, then 
 
 ---
 
+# ADR-0002: Framework-neutral deterministic core
+
+## Context
+
+MAP must describe systems built with many model providers, languages, and agent
+frameworks. Binding the domain to one SDK would shorten an initial implementation but
+make patterns, scanners, and recommendations obsolete when that SDK changes. Requiring
+an LLM would also make baseline results non-repeatable and unavailable offline.
+
+## Decision
+
+Registry parsing, graph construction, validation, static scanning, and baseline
+recommendation are pure or deterministic core capabilities. They MUST NOT depend on a
+model provider, agent framework, remote service, or MCP runtime.
+
+Framework manifests, coding-agent formats, MCP, semantic indexes, and optional LLM
+reasoning are adapters at explicit boundaries. Core types use MAP vocabulary and may
+carry adapter evidence without importing adapter-specific types.
+
+## Consequences
+
+- Core commands work offline and are straightforward to test.
+- Framework integrations can evolve independently.
+- Some framework-specific insight will initially be less deep than a dedicated tool.
+- Optional assisted output must be labeled and cannot replace deterministic evidence.
+
+## Verification
+
+- Core package dependency graphs contain no model SDK.
+- Tests use fixed inputs and require no network.
+- CLI JSON outputs identify limitations and remain stable for identical inputs.
+
+---
+
+# ADR-0003: Stable pattern identity and schema
+
+## Context
+
+MAP already publishes and cross-references slash-form pattern IDs. Proposed examples
+sometimes use dotted IDs, and the current YAML contract is described but not enforced.
+A silent identifier migration would break links, commands, adopted patterns, and caches.
+
+## Decision
+
+Pattern Schema v1 uses canonical IDs matching `^[a-z0-9-]+/[a-z0-9-]+$`. A record has
+an explicit `kind` (`pattern` or `anti-pattern`), lifecycle status, optional evidence
+maturity, decision guidance, and typed relationships. Flat `related` input remains a
+supported compatibility field and normalizes to `works_with` edges.
+
+Aliases may accept alternate spelling at input boundaries, but public output and graph
+nodes return the canonical slash-form ID. Meaning-changing contract updates require a
+new schema version and migration notes.
+
+## Consequences
+
+- Existing links and CLI workflows remain valid.
+- Patterns and anti-patterns share validation and discovery infrastructure.
+- Authors must distinguish publication status from evidence maturity.
+- Compatibility normalization adds a small amount of registry-builder logic.
+
+## Verification
+
+- Schema fixtures cover canonical IDs, anti-patterns, relationships, and failures.
+- Registry parsing rejects duplicate IDs and dangling relation targets.
+- Existing five published patterns validate without identity changes.
+
+---
+
+# ADR-0004: Versioned CLI JSON contracts
+
+## Context
+
+Terminal prose is useful to people but brittle for automation and agent tools. Adding
+fields without an envelope also prevents consumers from knowing which contract they
+received.
+
+## Decision
+
+Commands with machine output emit a JSON document with `schemaVersion`, `kind`, and
+command-specific payload. JSON mode writes no headings, colors, or success messages to
+standard output. Diagnostic warnings go to standard error. Arrays use documented,
+deterministic ordering.
+
+Existing human output stays the default. Existing commands remain, while clearer names
+(`list`, `show`, `search`, `scan`, `suggest`) are additive aliases over the same core
+use cases.
+
+## Consequences
+
+- Agents can consume CLI results without text scraping.
+- Contract changes require deliberate versioning and fixtures.
+- Reporter implementations and tests must preserve stdout/stderr separation.
+
+## Verification
+
+- JSON outputs validate against published schemas where one exists.
+- Alias and original commands produce equivalent payloads.
+- Snapshot tests assert deterministic ordering and absence of decoration.
+
+---
+
+# ADR-0005: Static analysis before assisted analysis
+
+## Context
+
+Repository analysis can become invasive, expensive, and non-repeatable if it executes
+project code, reads secrets, or uploads source to a model. Dependency manifests provide
+a narrower but auditable first signal.
+
+## Decision
+
+The MVP scanner reads declared dependency manifests as data and never executes project
+code. It records file-level evidence, numeric confidence, a derived certainty state,
+the analyzers used, and limitations. Unsupported or absent evidence is `unknown`, not
+proof that a capability is absent.
+
+Source, configuration, semantic, runtime, and LLM analyzers are separate future
+adapters with explicit permissions and provenance.
+
+## Consequences
+
+- MVP scanning is fast, local, and safe by default.
+- Results have false negatives and cannot verify implementations.
+- Recommendation text must explain the evidence boundary.
+
+## Verification
+
+- Scanner tests use fixtures and make no network calls.
+- Results list inspected files and analyzer limitations.
+- Secret values are never included in output.
+
+---
+
 # MAP's own workspace
 
 This repository uses the same project structure generated by `map init`. The
@@ -131,6 +264,37 @@ Notes and diagrams describing this project's AI architecture: which patterns are
 in play, how data flows, and where the model boundaries are. `map analyze`
 detections (see `reports/`) are the generated starting point; this directory is
 the curated, human-maintained picture.
+
+---
+
+# ADR-0006: MCP as a separate adapter
+
+## Context
+
+MCP can expose MAP knowledge to agents, but it introduces transport, lifecycle,
+permissions, and compatibility concerns unrelated to the core domain.
+
+## Decision
+
+MCP is deferred from the deterministic MVP and will live in a separate adapter package.
+It will call the same registry, graph, scanner, recommendation, and validation ports as
+the CLI. The MCP layer may format or transport results but must not define alternate
+pattern semantics.
+
+Initial MCP tools should be read-only. Any future mutation tool requires an explicit
+threat model, path boundary, preview, and human approval policy.
+
+## Consequences
+
+- The core remains usable without an MCP runtime.
+- CLI and MCP behavior can share contract tests.
+- MCP delivery follows rather than blocks the MVP.
+
+## Verification
+
+- No MCP dependency exists in core packages.
+- Future MCP results validate against the same public contracts as CLI JSON.
+- Security review precedes any write-capable MCP tool.
 
 ---
 

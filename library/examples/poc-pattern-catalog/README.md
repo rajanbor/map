@@ -4,24 +4,25 @@ Unlike the other examples (which are ADR-style documents), this one is runnable:
 it shows the two ways to consume MAP's pattern catalog, via the CLI and
 programmatically through the **registry** artifact.
 
-## 1. The CLI: `map patterns`
+## 1. The CLI: `map list` and `map search`
 
 ```bash
-npm install -g @missing-ai-patterns/cli    # or: npx @missing-ai-patterns/cli
+git clone https://github.com/rajanbor/map.git
+cd map && ./scripts/install.sh
 
-map patterns                          # full catalog (roadmap + written)
-map patterns chunk                    # search by text
-map patterns --category=retrieval     # filter by category
-map patterns --status=published       # only written patterns
-map patterns --json                   # machine-readable output
+map list                              # full catalog (roadmap + written)
+map search chunk                      # search by text
+map list --category=retrieval         # filter by category
+map list --status=published           # only written patterns
+map list --json                       # machine-readable output
 ```
 
 Published patterns show their [MAP Score](../../docs/specs/map-score.md) star
 line, so you can compare candidates at a glance. `--json` is meant for scripts
-and AI agents. `map explain <id>` gives the decision view of one pattern, and
+and AI agents. `map show <id>` gives the decision view of one pattern, and
 `map add <id>` copies its prompt/acceptance files into your project.
 
-The CLI lives in [missing-ai-patterns/cli](https://github.com/rajanbor/map/tree/main/tooling).
+The CLI lives under [`tooling/`](../../../tooling/) in this repository.
 
 ## 2. Programmatic: the registry
 

@@ -4,18 +4,19 @@
 
 # missing-ai-patterns/cli
 
-The `map` command and its shared libraries. The pattern catalog itself — the
-patterns, docs, and specifications — lives in the canonical
-[**map** repository](https://github.com/rajanbor/map); this repository
-consumes its published **registry** artifact.
+The `map` command and its shared libraries inside the consolidated MAP monorepo.
+The pattern catalog under [`../library`](../library/) compiles into the registry this
+workspace consumes.
 
 ```bash
-npm install -g @missing-ai-patterns/cli
+git clone https://github.com/rajanbor/map.git
+cd map
+./scripts/install.sh
 
 map init        # create the .map/ workspace in your project
-map analyze     # detect your AI architecture
-map recommend   # find the patterns you're missing
-map explain retrieval/chunking
+map scan        # detect evidence-backed architecture signals
+map suggest     # find patterns worth reviewing
+map show retrieval/chunking
 map add retrieval/chunking
 ```
 
@@ -29,9 +30,9 @@ map add retrieval/chunking
 ## How data flows
 
 ```
-map repo (patterns, ROADMAP)
-   └── scripts/build-registry.ts → registry.json  (published on each map release)
-         └── consumed here: bundled snapshot + `map update` cache
+library/ (patterns, ROADMAP)
+   └── scripts/build-registry.ts → registry.json
+         └── tooling: bundled snapshot + `map update` cache
 ```
 
 The CLI never parses the map repository's Markdown — it reads `registry.json`
@@ -55,21 +56,23 @@ pnpm map -- --help    # run the CLI from source
 Developing against a local map checkout:
 
 ```bash
-MAP_REGISTRY=path/to/map/dist/registry.json pnpm map -- patterns
+MAP_REGISTRY=path/to/map/library/dist/registry.json pnpm map -- list
 MAP_REPO=path/to/map pnpm --filter @missing-ai-patterns/cli sync-snapshot
 ```
 
 ## Releasing
 
 1. Bump versions in `packages/*/package.json`.
-2. Refresh the bundled registry: `pnpm --filter @missing-ai-patterns/cli sync-snapshot`.
-3. Tag `v<version>` — the release workflow builds and publishes both packages to npm.
+2. Refresh the bundled registry with `MAP_REPO=.. pnpm --filter @missing-ai-patterns/cli sync-snapshot`.
+3. Tag `sdk/v<version>` only when the npm publication workflow and credentials are ready.
+
+The public npm package is not currently published; the supported user installation is
+the repository-level GitHub installer.
 
 ## Contributing
 
-Issues and PRs about the **CLI, score library, or tooling** belong here; new
-patterns and documentation belong in
-[missing-ai-patterns/map](https://github.com/rajanbor/map). The
+Issues and PRs for tooling, patterns, and documentation all belong in
+[rajanbor/map](https://github.com/rajanbor/map). The
 [vision document](docs/vision.md) describes where the CLI is heading.
 
 ## License

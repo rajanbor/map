@@ -19,8 +19,8 @@ projection of `registry.json`, the same artifact every other tool consumes.
 MAP currently onboards through a GitHub README — fine for contributors, weak for the
 "what is this, how do I try it in 30 seconds" visitor. The old in-repo `website/`
 placeholder promised an interactive knowledge site someday; that ambition blocked
-shipping anything. A one-page site that states the pitch, shows `npm install -g
-@missing-ai-patterns/cli`, and lists the catalog is achievable now and improves every
+shipping anything. A one-page site that states the pitch, shows the GitHub installer,
+and lists the catalog is achievable now and improves every
 link we share.
 
 ## Design
@@ -35,14 +35,14 @@ works with JavaScript disabled.
 
 **Page structure** (single page, in order):
 
-1. **Hero** — one-line pitch, `npm install -g @missing-ai-patterns/cli` in a copyable
+1. **Hero** — one-line pitch, `git clone` plus `./scripts/install.sh` in a copyable
    block, links to GitHub + docs.
 2. **What is MAP** — 3 short paragraphs (from the README's "What is MAP?" — the site
    never forks the message, it condenses it).
 3. **The catalog** — categories with their published patterns (name, one-line
    summary, MAP Score as compact stars), linking to the pattern on GitHub; a counter
    ("N published / ~75 planned") from registry statuses.
-4. **How you use it** — one worked example: `map analyze` → `map recommend` →
+4. **How you use it** — one worked example: `map scan` → `map suggest` →
    `map add security/prompt-injection-defense`, as annotated terminal output.
 5. **Docs & community** — links: philosophy, pattern anatomy, contributing, the RFC,
    discussions.

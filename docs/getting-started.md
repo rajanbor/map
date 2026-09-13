@@ -30,19 +30,22 @@ existing files unless `--force` is explicitly supplied.
 ## 3. Understand the architecture
 
 ```bash
-map analyze
-map recommend
-map patterns retrieval
+map scan
+map suggest
+map search retrieval
 ```
 
-`analyze` detects architecture signals from project manifests. `recommend`
-maps those signals to production patterns, and `patterns` lets you browse the
-full library.
+`scan` detects evidence-backed architecture signals from project manifests and states
+the limits of static analysis. `suggest` maps those signals to review candidates with
+reasons, and `search` lets you browse the full library. Add `--json` to consume stable
+scan and recommendation contracts from scripts or agents. The older `analyze`,
+`recommend`, and `patterns` names remain supported.
 
 ## 4. Adopt knowledge into the project
 
 ```bash
 map add retrieval/chunking
+map validate
 ```
 
 The pattern's prompt, acceptance criteria, and metadata are copied into

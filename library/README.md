@@ -113,8 +113,8 @@ map/
   .github/       Contributor experience: templates, labels, discussions, CI
 ```
 
-The **MAP CLI** lives in its own repository,
-[missing-ai-patterns/cli](https://github.com/rajanbor/map/tree/main/tooling). It consumes the
+The **MAP CLI** lives in this repository under
+[`tooling/`](../tooling/). It consumes the
 **registry** — the machine-readable catalog this repository publishes with every release
 (see the [registry spec](docs/specs/registry.md)).
 
@@ -168,13 +168,18 @@ and guardrails, so its decisions are consistent and reviewable. See the
 
 The [MAP CLI](https://github.com/rajanbor/map/tree/main/tooling) surfaces this directly:
 
-```bash
-npm install -g @missing-ai-patterns/cli
+Install it from GitHub (the npm package is not published yet):
 
-map explain retrieval/chunking     # what the pattern is and when to use it
+```bash
+git clone https://github.com/rajanbor/map.git
+cd map
+./scripts/install.sh
+
+map init
+map show retrieval/chunking        # what the pattern is and when to use it
 map add retrieval/chunking         # copy prompt.md + acceptance.md into your .map/ workspace
-map analyze                        # detect the AI architecture already in your project
-map recommend                      # which MAP patterns your architecture is missing
+map scan                           # detect evidence-backed architecture signals
+map suggest                        # review patterns your architecture may need
 ```
 
 ## Contributing

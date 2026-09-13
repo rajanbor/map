@@ -14,12 +14,12 @@ Specifications (the contracts tools build on — see the
 - **[Pattern Contract](pattern-contract.md)** — the files every pattern ships and who consumes them.
 - **[MAP Score](specs/map-score.md)** — the five-dimension 1–5 star rating. *(implemented)*
 - **[Registry](specs/registry.md)** — the machine-readable catalog artifact published on each release. *(implemented)*
-- **[Pattern Schema](specs/pattern-schema.md)** — the formal, build-enforced schema for `pattern.yaml`. *(draft)*
+- **[Pattern Schema](specs/pattern-schema.md)** — the formal, build-enforced schema for `pattern.yaml`. *(implemented)*
 - **[Pattern Lifecycle](specs/pattern-lifecycle.md)** — claiming, maturity, deprecation, and renames. *(draft)*
 - **[Decision Guides](specs/decision-guides.md)** — cross-category "X or Y?" guides and their contract. *(draft)*
 - **[Website](specs/website.md)** — the ultra-simple registry-fed site. *(draft)*
 - **[MAP Schemas](schemas/README.md)** — machine contracts paired with human guides and fixtures.
 
 For the patterns themselves, see [`../patterns/`](../patterns/). To contribute, see
-[`../CONTRIBUTING.md`](../CONTRIBUTING.md). The `map` CLI lives in
-[missing-ai-patterns/cli](https://github.com/rajanbor/map/tree/main/tooling).
+[`../CONTRIBUTING.md`](../CONTRIBUTING.md). The `map` CLI lives in this monorepo under
+[`../../tooling`](../../tooling/).

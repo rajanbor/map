@@ -22,6 +22,7 @@ const CONTRACTS: readonly Contract[] = [
   { name: "document", schema: "document.schema.json", fixtures: "document" },
   { name: "project", schema: "project.schema.json", fixtures: "project" },
   { name: "decision", schema: "decision.schema.json", fixtures: "decision" },
+  { name: "pattern", schema: "pattern.schema.json", fixtures: "pattern" },
 ];
 
 const failures: string[] = [];
@@ -72,6 +73,7 @@ for (const [name, value] of [
 }
 
 await validateDecisionDocuments();
+await validatePatternDocuments();
 
 if (failures.length > 0) {
   failures.forEach((failure) => process.stderr.write(`error: ${failure}\n`));
@@ -284,6 +286,89 @@ async function validateDecisionDocuments(): Promise<void> {
       }
     });
   }
+}
+
+async function validatePatternDocuments(): Promise<void> {
+  const patternsRoot = join(WORKSPACE_ROOT, "library/patterns");
+  const categoryEntries = await readdir(patternsRoot, { withFileTypes: true });
+  const schema = schemaRegistry.get("pattern.schema.json") as Record<string, unknown>;
+  const ids = new Set<string>();
+  const records: Array<{ path: string; metadata: Record<string, unknown> }> = [];
+
+  for (const categoryEntry of categoryEntries.sort((a, b) => a.name.localeCompare(b.name))) {
+    if (!categoryEntry.isDirectory() || categoryEntry.name.startsWith("_")) continue;
+    const categoryRoot = join(patternsRoot, categoryEntry.name);
+    const patternEntries = await readdir(categoryRoot, { withFileTypes: true });
+    for (const patternEntry of patternEntries.sort((a, b) => a.name.localeCompare(b.name))) {
+      if (!patternEntry.isDirectory() || patternEntry.name.startsWith("_")) continue;
+      const patternRoot = join(categoryRoot, patternEntry.name);
+      const path = join(patternRoot, "pattern.yaml");
+      try {
+        const parsed = parseYaml(await readFile(path, "utf8"));
+        if (!isRecord(parsed)) {
+          failures.push(`${display(path)}: pattern metadata must be a mapping`);
+          continue;
+        }
+        const errors = validate(parsed, schema, schema);
+        if (errors.length > 0) failures.push(`${display(path)}: ${withRemediation(errors[0]!)}`);
+
+        const expectedId = `${categoryEntry.name}/${patternEntry.name}`;
+        if (parsed.id !== expectedId) failures.push(`${display(path)}: $.id must equal directory id '${expectedId}'`);
+        if (parsed.category !== categoryEntry.name) {
+          failures.push(`${display(path)}: $.category must equal directory category '${categoryEntry.name}'`);
+        }
+        if (parsed.slug !== undefined && parsed.slug !== patternEntry.name) {
+          failures.push(`${display(path)}: $.slug must equal directory slug '${patternEntry.name}'`);
+        }
+        if (typeof parsed.id === "string") {
+          if (ids.has(parsed.id)) failures.push(`${display(path)}: duplicate pattern id '${parsed.id}'`);
+          ids.add(parsed.id);
+        }
+        for (const requiredFile of ["README.md", "prompt.md", "acceptance.md", "diagram.mmd"]) {
+          try {
+            await readFile(join(patternRoot, requiredFile), "utf8");
+          } catch {
+            failures.push(`${display(patternRoot)}: published pattern requires ${requiredFile}`);
+          }
+        }
+        records.push({ path, metadata: parsed });
+      } catch (error) {
+        failures.push(`${display(path)}: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+  }
+
+  const catalogIds = new Set<string>();
+  // The bundled snapshot is tracked, unlike the generated library/dist artifact, and
+  // contains the complete roadmap catalog needed for referential validation in CI.
+  const registry = await readJson(
+    join(WORKSPACE_ROOT, "tooling/packages/cli/registry-snapshot/registry.json"),
+  );
+  if (isRecord(registry) && Array.isArray(registry.patterns)) {
+    for (const entry of registry.patterns.filter(isRecord)) {
+      if (typeof entry.id === "string") catalogIds.add(entry.id);
+    }
+  }
+  for (const record of records) {
+    for (const target of relationTargets(record.metadata)) {
+      if (!catalogIds.has(target) && !ids.has(target)) {
+        failures.push(`${display(record.path)}: relationship target '${target}' does not exist in the catalog`);
+      }
+    }
+  }
+}
+
+function relationTargets(metadata: Record<string, unknown>): string[] {
+  const legacy = Array.isArray(metadata.related)
+    ? metadata.related.filter((value): value is string => typeof value === "string")
+    : [];
+  const typed = Array.isArray(metadata.relations)
+    ? metadata.relations
+        .filter(isRecord)
+        .map((relation) => relation.target)
+        .filter((value): value is string => typeof value === "string")
+    : [];
+  return [...legacy, ...typed];
 }
 
 function hasNonEmptySection(source: string, heading: string): boolean {

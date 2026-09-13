@@ -1,0 +1,36 @@
+{
+  "id": "retrieval/chunking",
+  "kind": "pattern",
+  "name": "Chunking",
+  "category": "retrieval",
+  "slug": "chunking",
+  "version": "1.0.0",
+  "status": "published",
+  "maturity": "established",
+  "also_known_as": ["Document segmentation"],
+  "summary": "Split source material into retrievable units while preserving context.",
+  "score": {
+    "complexity": 2,
+    "latency": 5,
+    "cost": 5,
+    "accuracyImpact": 5,
+    "productionReadiness": 5
+  },
+  "when_to_use": ["Documents exceed the useful retrieval context size."],
+  "when_not_to_use": ["The complete source must be reasoned over as one unit."],
+  "relations": [
+    {
+      "type": "works_with",
+      "target": "retrieval/reranking",
+      "note": "Reranking selects among retrieved chunks."
+    }
+  ],
+  "references": ["https://arxiv.org/abs/2005.11401"],
+  "evidence": [
+    {
+      "source": "https://arxiv.org/abs/2005.11401",
+      "title": "Retrieval-Augmented Generation"
+    }
+  ],
+  "files": ["README.md", "pattern.yaml", "prompt.md", "acceptance.md", "diagram.mmd"]
+}

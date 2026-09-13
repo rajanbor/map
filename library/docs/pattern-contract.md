@@ -1,11 +1,15 @@
 # Pattern File Contract
 
+Structured metadata is normatively validated by
+[`pattern.schema.json`](../schemas/pattern.schema.json) and documented in the
+[Pattern Schema v1 guide](../../docs/specifications/PATTERN_SCHEMA.md).
+
 MAP patterns are meant to be consumed by **humans, tools, and AI coding agents**. To make
 that possible without rewriting anything, each pattern folder can hold a small, predictable
 set of files. This is the contract.
 
-Only `README.md` is required today. The rest form an **optional, extensible AI-ready
-layer** — add them as a pattern matures.
+A published pattern requires `README.md`, `pattern.yaml`, `prompt.md`, `acceptance.md`,
+and `diagram.mmd`. Reference code and assets remain optional.
 
 ## Folder layout
 

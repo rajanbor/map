@@ -1,0 +1,9 @@
+{
+  "id": "retrieval.chunking",
+  "name": "Chunking",
+  "category": "retrieval",
+  "summary": "This otherwise complete record uses a noncanonical pattern identifier.",
+  "score": { "complexity": 2, "latency": 5, "cost": 5, "accuracyImpact": 5, "productionReadiness": 5 },
+  "when_to_use": ["Long documents."],
+  "when_not_to_use": ["Short records."]
+}

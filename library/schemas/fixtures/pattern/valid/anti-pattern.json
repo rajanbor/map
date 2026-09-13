@@ -1,0 +1,19 @@
+{
+  "id": "security/unbounded-tool-authority",
+  "kind": "anti-pattern",
+  "name": "Unbounded Tool Authority",
+  "category": "security",
+  "summary": "An agent receives broad tool permissions without task-scoped capability limits.",
+  "score": {
+    "complexity": 1,
+    "latency": 5,
+    "cost": 3,
+    "accuracyImpact": 1,
+    "productionReadiness": 1
+  },
+  "when_to_use": ["Never as a deliberate production architecture."],
+  "when_not_to_use": ["Use least-privilege, sandboxed, confirmation-gated tools instead."],
+  "relations": [
+    { "type": "conflicts_with", "target": "security/least-privilege-tool-access" }
+  ]
+}

@@ -8,14 +8,11 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       include: ["src/**/*.ts"],
-      // Barrels, the public API surface, entry shims, and not-yet-implemented
-      // stubs carry no meaningful logic to test.
+      // Barrels, entry shims, and pure interfaces carry no logic to test.
       exclude: [
         "src/**/index.ts",
         "src/bin.ts",
-        "src/cli/commands/planned.ts",
         "src/analyzer/analyzer.ts",
-        "src/plugins/**",
       ],
       reporter: ["text-summary", "text"],
       thresholds: {

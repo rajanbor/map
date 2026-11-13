@@ -48,6 +48,15 @@ export const addCommand: Command = {
       return FAILED;
     }
 
+    // The registry may come from a downloaded cache, so its ids and file names are
+    // untrusted input: refuse anything that could escape .map/patterns/.
+    const unsafe = unsafePatternPaths(entry);
+    if (unsafe.length > 0) {
+      reporter.error(`'${id}' has unsafe registry paths (${unsafe.join(", ")}); refusing to write.`);
+      reporter.info("Run 'map update' to refresh the registry, or report the registry entry.");
+      return FAILED;
+    }
+
     const targetDir = join(mapDir, "patterns", entry.id);
     const force = ctx.flags["force"] === true;
     await services.storage.ensureDir(targetDir);
@@ -75,6 +84,19 @@ export const addCommand: Command = {
     return OK;
   },
 };
+
+const PATTERN_ID = /^[a-z0-9-]+\/[a-z0-9-]+$/;
+const FILE_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+
+/** Pattern ids and embedded file names that could not be written safely. */
+export function unsafePatternPaths(entry: CatalogEntry): readonly string[] {
+  const unsafe: string[] = [];
+  if (!PATTERN_ID.test(entry.id)) unsafe.push(`id ${JSON.stringify(entry.id)}`);
+  for (const name of Object.keys(entry.files ?? {})) {
+    if (!FILE_NAME.test(name) || name === "pattern.json") unsafe.push(`file ${JSON.stringify(name)}`);
+  }
+  return unsafe;
+}
 
 /** The metadata written next to the pattern files (everything but the files). */
 function metadata(entry: CatalogEntry): Omit<CatalogEntry, "files"> {

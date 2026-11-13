@@ -18,7 +18,7 @@ const RECOMMENDATION_LIMITATIONS = [
 
 export const recommendCommand: Command = {
   name: "recommend",
-  summary: "Recommend patterns missing from the detected architecture.",
+  summary: "Compatible name for `map suggest`.",
   usage: "map recommend [path]",
   args: "[path]",
   options: [{ flags: "--json", description: "machine-readable recommendation result" }],

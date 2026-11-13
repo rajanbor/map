@@ -25,10 +25,32 @@ const CONTRACTS: readonly Contract[] = [
   { name: "pattern", schema: "pattern.schema.json", fixtures: "pattern" },
   { name: "scan-result", schema: "scan-result.schema.json", fixtures: "scan-result" },
   { name: "recommendation-result", schema: "recommendation-result.schema.json", fixtures: "recommendation-result" },
+  { name: "skills-lock", schema: "skills-lock.schema.json", fixtures: "skills-lock" },
+  { name: "project-profile", schema: "project-profile.schema.json", fixtures: "project-profile" },
+  { name: "plan", schema: "plan.schema.json", fixtures: "plan" },
 ];
 
 const failures: string[] = [];
 const schemaRegistry = new Map<string, JsonSchema>();
+
+// `validate-schemas.ts --check <schema-file> <json-file>` validates one document,
+// so tests can assert that real CLI output matches the published contract.
+const checkIndex = process.argv.indexOf("--check");
+if (checkIndex !== -1) {
+  const [schemaName, documentPath] = process.argv.slice(checkIndex + 1);
+  if (schemaName === undefined || documentPath === undefined) {
+    process.stderr.write("usage: validate-schemas.ts --check <name>.schema.json <document.json>\n");
+    process.exit(2);
+  }
+  const schema = await readJson(join(SCHEMA_ROOT, schemaName)) as Record<string, unknown>;
+  const errors = validate(await readJson(documentPath), schema, schema);
+  if (errors.length > 0) {
+    errors.forEach((error) => process.stderr.write(`error: ${error}\n`));
+    process.exit(1);
+  }
+  process.stdout.write(`${documentPath}: valid ${schemaName}\n`);
+  process.exit(0);
+}
 
 for (const contract of CONTRACTS) {
   const schema = await readJson(join(SCHEMA_ROOT, contract.schema)) as Record<string, unknown>;
@@ -409,13 +431,16 @@ async function jsonFiles(path: string): Promise<string[]> {
 async function renderedInitConfig(): Promise<unknown> {
   const path = join(WORKSPACE_ROOT, "tooling/packages/cli/templates/workspace/map.config.json");
   const values: Readonly<Record<string, unknown>> = {
-    schemaVersion: 3,
+    schemaVersion: 4,
     projectName: "schema-fixture",
     createdAt: "2026-09-13T08:00:00.000Z",
     languages: ["typescript"],
     analyzers: ["typescript"],
     include: ["src/**"],
     exclude: ["**/node_modules/**"],
+    targets: { claude: { output: "CLAUDE.md" }, agents: { output: "AGENTS.md" } },
+    agents: ["claude", "codex"],
+    profiles: ["webapp"],
   };
   let source = await readFile(path, "utf8");
   for (const [key, value] of Object.entries(values)) {

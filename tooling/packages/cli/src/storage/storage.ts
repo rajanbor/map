@@ -6,6 +6,11 @@
  * or a remote storage later). Keep it small and intention-revealing.
  */
 
+export interface DirectoryEntry {
+  readonly name: string;
+  readonly type: "file" | "dir" | "symlink" | "other";
+}
+
 export interface Storage {
   exists(path: string): Promise<boolean>;
   /** Create a directory (and parents). No error if it already exists. */
@@ -17,6 +22,11 @@ export interface Storage {
    * Empty when `path` does not exist.
    */
   listFiles(path: string): Promise<readonly string[]>;
+  /**
+   * Direct children of `path` with their type, sorted by name. Symlinks are reported
+   * as symlinks and never followed. Empty when `path` does not exist.
+   */
+  listEntries(path: string): Promise<readonly DirectoryEntry[]>;
   readFile(path: string): Promise<string>;
   /**
    * Write a file. If `overwrite` is false and the file exists, the write is skipped

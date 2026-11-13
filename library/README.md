@@ -221,7 +221,7 @@ backlog and phases.
 ## Where MAP is heading
 
 Documentation is the first form of MAP, not the last. The longer-term plan, sketched in
-the CLI's [vision document](https://github.com/rajanbor/map/blob/main/tooling/docs/vision.md),
+the [MAP README](../README.md),
 is to grow MAP into an architecture layer for AI engineering, backed by a structured
 knowledge graph of patterns rather than Markdown alone. The first pieces exist today:
 the [registry](docs/specs/registry.md) and the working `map` CLI.

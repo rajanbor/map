@@ -1,13 +1,5 @@
 /** Domain layer: pure types and constants with no I/O. */
-export type {
-  Pattern,
-  PatternId,
-  PatternCategory,
-  Rating,
-  ProductionReadiness,
-  TradeOff,
-  ImplementationReference,
-} from "./pattern.ts";
+export type { PatternId, PatternCategory } from "./pattern.ts";
 export type { CatalogEntry, CatalogStatus, MapScore } from "./catalog.ts";
 export type { Relationship, RelationshipType } from "./relationship.ts";
 export type { ConceptId, ConceptDefinition } from "./concept.ts";

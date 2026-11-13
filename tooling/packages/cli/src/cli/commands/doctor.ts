@@ -30,6 +30,7 @@ import {
   globToRegExp,
 } from "../../compiler/index.ts";
 import type { Context } from "../../compiler/index.ts";
+import { LOCKFILE, auditInstalled } from "../../skills/index.ts";
 
 const MIN_NODE_MAJOR = 20;
 
@@ -69,6 +70,7 @@ export const doctorCommand: Command = {
     results.push(checkNode());
     results.push(...(await checkWorkspace(ctx)));
     results.push(...(await checkCompiler(ctx)));
+    results.push(...(await checkSkills(ctx)));
     results.push(...(await checkRegistry(ctx)));
     results.push(await checkRuleTable(ctx));
 
@@ -90,6 +92,30 @@ export const doctorCommand: Command = {
     return OK;
   },
 };
+
+/** Lockfile validity and on-disk integrity of MAP-installed skills. Offline. */
+async function checkSkills(ctx: CommandContext): Promise<readonly CheckResult[]> {
+  const lockFile = join(ctx.cwd, MAP_DIR, LOCKFILE);
+  if (!(await ctx.services.storage.exists(lockFile))) return [];
+  let installed;
+  try {
+    installed = (await auditInstalled(ctx.cwd)).filter((item) => item.managed);
+  } catch (error) {
+    return [{ verdict: "fail", message: `${MAP_DIR}/${LOCKFILE} is invalid: ${error instanceof Error ? error.message : String(error)}`, hint: "Fix it, or remove skills and re-add them." }];
+  }
+  const drifted = installed.filter((item) => item.integrity !== "clean");
+  const risky = installed.filter((item) => item.audit?.findings.some((f) => f.severity === "high" || f.severity === "block") === true);
+  const results: CheckResult[] = [];
+  results.push(
+    drifted.length === 0
+      ? { verdict: "ok", message: `${installed.length} installed skill location(s) match ${LOCKFILE}` }
+      : { verdict: "fail", message: `skills differ from ${LOCKFILE}: ${drifted.map((d) => `${d.path} (${d.integrity})`).join(", ")}`, hint: "Run 'map skills audit' for details; 'map skills install' restores locked content." },
+  );
+  if (risky.length > 0) {
+    results.push({ verdict: "warn", message: `high-severity audit findings in ${risky.map((r) => r.path).join(", ")}`, hint: "Review with 'map skills audit'." });
+  }
+  return results;
+}
 
 function report(reporter: Reporter, result: CheckResult): void {
   const icon = result.verdict === "ok" ? "✓" : result.verdict === "warn" ? "!" : "✗";

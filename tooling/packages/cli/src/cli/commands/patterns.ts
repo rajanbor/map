@@ -22,7 +22,7 @@ const STATUS_ICONS: Readonly<Record<CatalogStatus, string>> = {
 
 export const patternsCommand: Command = {
   name: "patterns",
-  summary: "List and search the MAP pattern catalog.",
+  summary: "Compatible name for `map list` / `map search`.",
   usage: "map patterns [text] [--category <category>] [--status <status>] [--json]",
   args: "[text]",
   options: [

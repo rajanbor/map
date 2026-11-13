@@ -30,6 +30,19 @@ export function fakeStorage(files: Record<string, string> = {}): Storage & {
         .map((f) => f.slice(path.length + 1))
         .sort();
     },
+    async listEntries(path) {
+      const entries = new Map<string, "file" | "dir">();
+      for (const file of Object.keys(files)) {
+        if (!file.startsWith(`${path}/`)) continue;
+        const rest = file.slice(path.length + 1);
+        const [head] = rest.split("/");
+        if (head === undefined) continue;
+        entries.set(head, rest.includes("/") ? "dir" : "file");
+      }
+      return [...entries.entries()]
+        .map(([name, type]) => ({ name, type }))
+        .sort((a, b) => (a.name < b.name ? -1 : 1));
+    },
     async readFile(path) {
       const contents = files[path];
       if (contents === undefined) throw new Error(`ENOENT: ${path}`);
@@ -55,6 +68,7 @@ export function capture(): Reporter & { lines: string[] } {
     success: (m) => void lines.push(m),
     warn: (m) => void lines.push(m),
     error: (m) => void lines.push(m),
+    data: (m) => void lines.push(m),
   };
 }
 

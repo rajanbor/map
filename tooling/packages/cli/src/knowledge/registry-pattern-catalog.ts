@@ -13,7 +13,11 @@ import type { RegistryDocument } from "./registry.ts";
 export class RegistryPatternCatalog implements PatternCatalog {
   private document: Promise<RegistryDocument> | undefined;
 
-  constructor(private readonly load: () => Promise<RegistryDocument>) {}
+  private readonly load: () => Promise<RegistryDocument>;
+
+  constructor(load: () => Promise<RegistryDocument>) {
+    this.load = load;
+  }
 
   /** The underlying registry document (for provenance reporting, e.g. doctor). */
   async registry(): Promise<RegistryDocument> {

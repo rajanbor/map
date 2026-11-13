@@ -1,62 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
-import { InMemoryKnowledgeBase } from "../src/knowledge/in-memory-knowledge-base.ts";
-import { NullRecommender } from "../src/recommendation/recommender.ts";
 import { ConsoleReporter } from "../src/reporting/reporter.ts";
 import { createDefaultServices } from "../src/services.ts";
-import type { Pattern } from "../src/domain/index.ts";
-
-function makePattern(overrides: Partial<Pattern>): Pattern {
-  return {
-    id: "retrieval/chunking",
-    name: "Chunking",
-    category: "retrieval",
-    description: "Split documents for retrieval.",
-    problem: "",
-    solution: "",
-    tradeoffs: [],
-    prerequisites: [],
-    alternatives: [],
-    compatiblePatterns: [],
-    conflictingPatterns: [],
-    implementationReferences: [],
-    complexity: "low",
-    latencyImpact: "low",
-    costImpact: "low",
-    securityConsiderations: [],
-    productionReadiness: "established",
-    ...overrides,
-  };
-}
-
-describe("InMemoryKnowledgeBase", () => {
-  const chunking = makePattern({ id: "retrieval/chunking", name: "Chunking", category: "retrieval" });
-  const summary = makePattern({
-    id: "memory/summary",
-    name: "Summary Memory",
-    category: "memory",
-    description: "Summarize past turns.",
-  });
-  const kb = new InMemoryKnowledgeBase([chunking, summary]);
-
-  it("returns all patterns and looks up by id", async () => {
-    await kb.load();
-    expect(await kb.all()).toHaveLength(2);
-    expect((await kb.get("memory/summary"))?.name).toBe("Summary Memory");
-    expect(await kb.get("missing")).toBeUndefined();
-  });
-
-  it("filters by category and text", async () => {
-    expect(await kb.find({ category: "retrieval" })).toHaveLength(1);
-    expect(await kb.find({ text: "summarize" })).toHaveLength(1);
-    expect(await kb.find({ category: "memory", text: "chunking" })).toHaveLength(0);
-  });
-});
-
-describe("NullRecommender", () => {
-  it("recommends nothing yet", async () => {
-    expect(await new NullRecommender().recommend()).toEqual([]);
-  });
-});
+import { FileSystemStorage } from "../src/storage/index.ts";
 
 describe("createDefaultServices", () => {
   it("wires defaults and honors overrides", () => {
@@ -64,8 +9,8 @@ describe("createDefaultServices", () => {
     expect(services.storage).toBeDefined();
     expect(services.graph).toBeDefined();
 
-    const kb = new InMemoryKnowledgeBase([]);
-    expect(createDefaultServices({ knowledgeBase: kb }).knowledgeBase).toBe(kb);
+    const storage = new FileSystemStorage();
+    expect(createDefaultServices({ storage }).storage).toBe(storage);
   });
 });
 

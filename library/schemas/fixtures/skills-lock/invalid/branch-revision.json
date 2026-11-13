@@ -1,0 +1,41 @@
+{
+  "lockfileVersion": 1,
+  "skills": {
+    "python-project": {
+      "source": {
+        "id": "rajanbor",
+        "type": "git",
+        "url": "https://github.com/rajanbor/skills.git",
+        "ref": "main"
+      },
+      "path": "dev/python-project",
+      "revision": "main",
+      "integrity": "sha256-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "version": "0.1.0",
+      "scope": "project",
+      "targets": [
+        {
+          "dir": ".agents/skills",
+          "agents": [
+            "codex"
+          ]
+        },
+        {
+          "dir": ".claude/skills",
+          "agents": [
+            "claude",
+            "cursor"
+          ]
+        }
+      ],
+      "files": [
+        "SKILL.md",
+        "scripts/scaffold.sh"
+      ],
+      "approvals": {
+        "scripts": true,
+        "risky": false
+      }
+    }
+  }
+}

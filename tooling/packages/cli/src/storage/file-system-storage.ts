@@ -5,7 +5,7 @@
 import { mkdir, readdir, readFile, writeFile, access, rm } from "node:fs/promises";
 import { constants } from "node:fs";
 import { join } from "node:path";
-import type { Storage } from "./storage.ts";
+import type { DirectoryEntry, Storage } from "./storage.ts";
 
 export class FileSystemStorage implements Storage {
   async exists(path: string): Promise<boolean> {
@@ -37,6 +37,26 @@ export class FileSystemStorage implements Storage {
         .filter((entry) => entry.isFile())
         .map((entry) => join(entry.parentPath, entry.name).slice(path.length + 1))
         .sort();
+    } catch {
+      return [];
+    }
+  }
+
+  async listEntries(path: string): Promise<readonly DirectoryEntry[]> {
+    try {
+      const entries = await readdir(path, { withFileTypes: true });
+      return entries
+        .map((entry): DirectoryEntry => ({
+          name: entry.name,
+          type: entry.isSymbolicLink()
+            ? "symlink"
+            : entry.isDirectory()
+              ? "dir"
+              : entry.isFile()
+                ? "file"
+                : "other",
+        }))
+        .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
     } catch {
       return [];
     }

@@ -11,6 +11,8 @@ export interface Reporter {
   success(message: string): void;
   warn(message: string): void;
   error(message: string): void;
+  /** Raw machine-readable output (JSON) on stdout, without decoration. */
+  data(text: string): void;
 }
 
 /** Default reporter that writes to stdout/stderr with light symbols. */
@@ -29,5 +31,9 @@ export class ConsoleReporter implements Reporter {
 
   error(message: string): void {
     process.stderr.write(`✗ ${message}\n`);
+  }
+
+  data(text: string): void {
+    process.stdout.write(text.endsWith("\n") ? text : `${text}\n`);
   }
 }

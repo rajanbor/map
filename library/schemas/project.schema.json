@@ -6,7 +6,7 @@
   "type": "object",
   "required": ["version", "project", "analysis", "registry"],
   "properties": {
-    "version": { "type": "integer", "minimum": 2, "maximum": 3 },
+    "version": { "type": "integer", "minimum": 2, "maximum": 4 },
     "specVersion": {
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+$",
@@ -136,6 +136,27 @@
         }
       },
       "additionalProperties": false
+    },
+    "agents": {
+      "description": "Coding agents this project is configured for. Added in version 4.",
+      "type": "array",
+      "items": { "enum": ["claude", "codex", "cursor", "copilot", "gemini"] },
+      "uniqueItems": true
+    },
+    "profiles": {
+      "description": "Development profiles applied by map init --profile. Added in version 4.",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+      "uniqueItems": true
+    },
+    "skills": {
+      "description": "Agent Skills sources. Added in version 4; absent means the built-in default source.",
+      "type": "object",
+      "properties": {
+        "sources": { "type": "array", "items": { "$ref": "#/$defs/skillSource" } }
+      },
+      "patternProperties": { "^x-[a-z0-9][a-z0-9-]*$": true },
+      "additionalProperties": false
     }
   },
   "patternProperties": {
@@ -143,6 +164,23 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "skillSource": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+        "type": { "enum": ["git", "local"] },
+        "url": { "type": "string", "pattern": "^(?:https://\\S+|ssh://\\S+|git@[\\w.-]+:\\S+|file:///\\S+|/\\S*)$" },
+        "ref": { "type": "string", "pattern": "^(?!-)(?!.*\\.\\.)[A-Za-z0-9._/-]{1,200}$" },
+        "path": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "git" } } }, "then": { "required": ["url"] } },
+        { "if": { "properties": { "type": { "const": "local" } } }, "then": { "required": ["path"] } }
+      ],
+      "patternProperties": { "^x-[a-z0-9][a-z0-9-]*$": true },
+      "additionalProperties": false
+    },
     "relativePath": {
       "type": "string",
       "minLength": 1,

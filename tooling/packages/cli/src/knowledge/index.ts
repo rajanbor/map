@@ -1,5 +1,3 @@
-export type { KnowledgeBase, PatternQuery } from "./knowledge-base.ts";
-export { InMemoryKnowledgeBase } from "./in-memory-knowledge-base.ts";
 export type { PatternCatalog, CatalogQuery } from "./pattern-catalog.ts";
 export { RegistryPatternCatalog } from "./registry-pattern-catalog.ts";
 export type { RegistryDocument } from "./registry.ts";

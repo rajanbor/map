@@ -23,7 +23,7 @@ describe("map sync", () => {
   it("compiles .map into every configured target", async () => {
     const dir = await tempProject();
     try {
-      await runCli(["init", "--yes"], { cwd: dir, reporter: silent() });
+      await runCli(["init", "--yes", "--agents", "claude,codex,cursor,copilot,gemini"], { cwd: dir, reporter: silent() });
       const code = await runCli(["sync"], { cwd: dir, reporter: silent() });
       expect(code).toBe(0);
 
@@ -39,7 +39,7 @@ describe("map sync", () => {
   it("keeps the Cursor MDC frontmatter first", async () => {
     const dir = await tempProject();
     try {
-      await runCli(["init", "--yes"], { cwd: dir, reporter: silent() });
+      await runCli(["init", "--yes", "--agents", "claude,codex,cursor,copilot,gemini"], { cwd: dir, reporter: silent() });
       await runCli(["sync"], { cwd: dir, reporter: silent() });
       const mdc = await readFile(join(dir, ".cursor/rules/map.mdc"), "utf8");
       expect(mdc.startsWith("---\n")).toBe(true);
@@ -64,7 +64,7 @@ describe("map sync", () => {
   it("regenerates outputs when a document changes", async () => {
     const dir = await tempProject();
     try {
-      await runCli(["init", "--yes"], { cwd: dir, reporter: silent() });
+      await runCli(["init", "--yes", "--agents", "claude,codex,cursor,copilot,gemini"], { cwd: dir, reporter: silent() });
       await writeFile(
         join(dir, ".map/architecture/README.md"),
         "# Architecture\n\nUNIQUE_MARKER_TOKEN\n",
@@ -79,7 +79,7 @@ describe("map sync", () => {
   it("respects per-document target frontmatter", async () => {
     const dir = await tempProject();
     try {
-      await runCli(["init", "--yes"], { cwd: dir, reporter: silent() });
+      await runCli(["init", "--yes", "--agents", "claude,codex,cursor,copilot,gemini"], { cwd: dir, reporter: silent() });
       await writeFile(
         join(dir, ".map/prompts/README.md"),
         "---\ntargets:\n  - claude\n---\n\n# Secret\n\nClaude only note.\n",
@@ -97,7 +97,7 @@ describe("map doctor (compiler checks)", () => {
   it("reports the compiler configuration as healthy after init", async () => {
     const dir = await tempProject();
     try {
-      await runCli(["init", "--yes"], { cwd: dir, reporter: silent() });
+      await runCli(["init", "--yes", "--agents", "claude,codex,cursor,copilot,gemini"], { cwd: dir, reporter: silent() });
       const reporter = capture();
       const code = await runCli(["doctor"], { cwd: dir, reporter });
       const out = reporter.lines.join("\n");
@@ -112,7 +112,7 @@ describe("map doctor (compiler checks)", () => {
   it("fails when a target has no adapter", async () => {
     const dir = await tempProject();
     try {
-      await runCli(["init", "--yes"], { cwd: dir, reporter: silent() });
+      await runCli(["init", "--yes", "--agents", "claude,codex,cursor,copilot,gemini"], { cwd: dir, reporter: silent() });
       const configPath = join(dir, ".map/map.config.json");
       const config = JSON.parse(await readFile(configPath, "utf8"));
       config.targets = { bogus: { output: "X.md" } };

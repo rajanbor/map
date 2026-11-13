@@ -21,7 +21,7 @@ import type { Reporter } from "../../reporting/index.ts";
 
 export const analyzeCommand: Command = {
   name: "analyze",
-  summary: "Scan the project and detect AI architecture concepts.",
+  summary: "Compatible name for `map scan`.",
   usage: "map analyze [path]",
   args: "[path]",
   options: [{ flags: "--json", description: "machine-readable scan result" }],

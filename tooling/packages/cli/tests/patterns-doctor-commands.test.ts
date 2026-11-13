@@ -14,6 +14,7 @@ function capture(): Reporter & { lines: string[] } {
     success: (m) => void lines.push(m),
     warn: (m) => void lines.push(m),
     error: (m) => void lines.push(m),
+    data: (m) => void lines.push(m),
   };
 }
 

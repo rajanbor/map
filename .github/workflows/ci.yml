@@ -48,11 +48,46 @@ jobs:
         run: |
           MAP_INSTALL_DIR="$RUNNER_TEMP/map-bin" ./scripts/install.sh
           "$RUNNER_TEMP/map-bin/map" --version
-      - name: Smoke-test the built CLI
+      - name: Smoke-test the built CLI (offline)
+        env:
+          MAP_OFFLINE: "1"
         run: |
-          node packages/cli/dist/map.js --help
-          node packages/cli/dist/map.js init
-          test -f .map/map.config.json
-          node packages/cli/dist/map.js add retrieval/chunking
+          map="node $PWD/packages/cli/dist/map.js"
+          $map --help
+          $map skills --help
+          smoke="$RUNNER_TEMP/smoke" && mkdir -p "$smoke" && cd "$smoke"
+          echo '{"dependencies":{"next":"15","react":"19"}}' > package.json
+          $map detect --json > detect.json
+          $map plan --no-skills --json > plan.json
+          $map init --yes --no-skills --agents claude,codex
+          test -f .map/map.config.json && test -f CLAUDE.md && test -f AGENTS.md
+          $map init --yes --no-skills
+          $map sync --check
+          $map add retrieval/chunking
           test -f .map/patterns/retrieval/chunking/prompt.md
-          node packages/cli/dist/map.js doctor
+          $map doctor
+          node "$GITHUB_WORKSPACE/library/scripts/validate-schemas.ts" --check project-profile.schema.json detect.json
+          node "$GITHUB_WORKSPACE/library/scripts/validate-schemas.ts" --check plan.schema.json plan.json
+      - name: Check generated agent files in this repository
+        working-directory: .
+        run: node tooling/packages/cli/dist/map.js sync --check
+
+  reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run reference implementation tests
+        run: |
+          set -e
+          for test in $(find library/reference/python -name 'test_*.py'); do
+            (cd "$(dirname "$test")" && python -m unittest -v)
+          done
+          for test in $(find library/reference/typescript -name '*.test.ts'); do
+            (cd "$(dirname "$test")" && node --test "$(basename "$test")")
+          done

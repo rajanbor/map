@@ -1,0 +1,542 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/rajanbor/map/main/library/schemas/plan.schema.json",
+  "title": "MAP configuration plan",
+  "description": "Output of map plan --json: what map init would set up, with evidence, conflicts, and required approvals.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "kind",
+    "root",
+    "workspace",
+    "project",
+    "probable",
+    "workspaces",
+    "agents",
+    "profiles",
+    "skills",
+    "patterns",
+    "changes",
+    "conflicts",
+    "approvals",
+    "security",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "map.plan"
+    },
+    "root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workspace": {
+      "enum": [
+        "new",
+        "existing"
+      ]
+    },
+    "project": {
+      "$ref": "#/$defs/summary"
+    },
+    "probable": {
+      "$ref": "#/$defs/summary"
+    },
+    "workspaces": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "agents": {
+      "type": "object",
+      "required": [
+        "detected",
+        "selected",
+        "selectedBy"
+      ],
+      "properties": {
+        "detected": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "claude",
+              "codex",
+              "cursor",
+              "copilot",
+              "gemini"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "selected": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "claude",
+              "codex",
+              "cursor",
+              "copilot",
+              "gemini"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "selectedBy": {
+          "enum": [
+            "flag",
+            "config",
+            "detected",
+            "default"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "profiles": {
+      "type": "object",
+      "required": [
+        "selected",
+        "suggested"
+      ],
+      "properties": {
+        "selected": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "suggested": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "skills": {
+      "type": "object",
+      "required": [
+        "sources",
+        "recommendations",
+        "unavailable",
+        "gaps"
+      ],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "type",
+              "revision",
+              "stale"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "git",
+                  "local"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fetchedAt": {
+                "type": "string"
+              },
+              "stale": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/skill"
+          }
+        },
+        "unavailable": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "reason"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "need",
+              "reason",
+              "evidence"
+            ],
+            "properties": {
+              "need": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "signal",
+                    "file",
+                    "certainty"
+                  ],
+                  "properties": {
+                    "signal": {
+                      "type": "string"
+                    },
+                    "file": {
+                      "type": "string"
+                    },
+                    "certainty": {
+                      "enum": [
+                        "confirmed",
+                        "probable"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "status",
+          "priority",
+          "reasons"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "priority": {
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/change"
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/change"
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "security": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "required": [
+        "languages",
+        "frameworks",
+        "infrastructure",
+        "tooling",
+        "agents"
+      ],
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "frameworks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "infrastructure": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "tooling": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "agents": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "claude",
+              "codex",
+              "cursor",
+              "copilot",
+              "gemini"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "change": {
+      "type": "object",
+      "required": [
+        "path",
+        "action",
+        "owner",
+        "reason"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": [
+            "create",
+            "update",
+            "keep",
+            "conflict"
+          ]
+        },
+        "owner": {
+          "enum": [
+            "map",
+            "user",
+            "generated"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "skill": {
+      "type": "object",
+      "required": [
+        "name",
+        "purpose",
+        "reasons",
+        "evidence",
+        "source",
+        "installed",
+        "approvals",
+        "findings",
+        "scripts",
+        "destinations"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "signal",
+              "file",
+              "certainty"
+            ],
+            "properties": {
+              "signal": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "certainty": {
+                "enum": [
+                  "confirmed",
+                  "probable"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string"
+        },
+        "compatibility": {
+          "type": "string"
+        },
+        "installed": {
+          "type": "boolean"
+        },
+        "approvals": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "scripts",
+              "risky"
+            ]
+          }
+        },
+        "findings": {
+          "type": "object",
+          "required": [
+            "high",
+            "medium"
+          ],
+          "properties": {
+            "high": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "medium": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "scripts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "action"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "action": {
+                "enum": [
+                  "create",
+                  "update",
+                  "keep",
+                  "conflict"
+                ]
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

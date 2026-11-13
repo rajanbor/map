@@ -14,7 +14,7 @@ import type { CatalogEntry } from "../../domain/index.ts";
 
 export const explainCommand: Command = {
   name: "explain",
-  summary: "Explain a pattern: what it is, when to use it, trade-offs.",
+  summary: "Compatible name for `map show`.",
   usage: "map explain <pattern-id>",
   args: "<pattern-id>",
   options: [{ flags: "--json", description: "machine-readable pattern metadata" }],

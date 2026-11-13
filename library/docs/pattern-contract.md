@@ -2,7 +2,7 @@
 
 Structured metadata is normatively validated by
 [`pattern.schema.json`](../schemas/pattern.schema.json) and documented in the
-[Pattern Schema v1 guide](../../docs/specifications/PATTERN_SCHEMA.md).
+[Pattern Schema v1 guide](schemas/pattern.md).
 
 MAP patterns are meant to be consumed by **humans, tools, and AI coding agents**. To make
 that possible without rewriting anything, each pattern folder can hold a small, predictable

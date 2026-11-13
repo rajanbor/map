@@ -1,0 +1,82 @@
+{
+  "version": 4,
+  "specVersion": "0.1",
+  "project": {
+    "name": "support-agent",
+    "createdAt": "2026-09-13T08:00:00.000Z",
+    "languages": [
+      "typescript",
+      "python"
+    ]
+  },
+  "analysis": {
+    "analyzers": [
+      "typescript",
+      "python"
+    ],
+    "include": [
+      "src/**",
+      "services/**"
+    ],
+    "exclude": [
+      "**/node_modules/**",
+      "**/dist/**"
+    ]
+  },
+  "registry": {
+    "source": "default"
+  },
+  "packs": [
+    {
+      "name": "@map/reviewer",
+      "version": "^1.0.0"
+    }
+  ],
+  "tools": {
+    "tokenOptimizer": {
+      "budget": 12000,
+      "include": [
+        "**/*.md"
+      ],
+      "exclude": [
+        "reports/**",
+        "cache/**"
+      ]
+    }
+  },
+  "sources": [
+    "**/*.md"
+  ],
+  "targets": {
+    "agents": {
+      "output": "AGENTS.md"
+    },
+    "cursor": {
+      "output": ".cursor/rules/map.mdc",
+      "adapter": "cursor"
+    }
+  },
+  "x-team": "platform",
+  "agents": [
+    "claude",
+    "codex"
+  ],
+  "profiles": [
+    "webapp"
+  ],
+  "skills": {
+    "sources": [
+      {
+        "id": "rajanbor",
+        "type": "git",
+        "url": "https://github.com/rajanbor/skills.git",
+        "ref": "main"
+      },
+      {
+        "id": "team",
+        "type": "local",
+        "path": "../team-skills"
+      }
+    ]
+  }
+}

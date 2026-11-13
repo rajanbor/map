@@ -1,7 +1,7 @@
 /**
- * Registers the built-in command set. `init`, `add`, `sync`, `watch`, `explain`,
- * `analyze`, `recommend`, `patterns`, graph, validation, compatible workflow aliases,
- * doctor, and update are implemented; architecture diff remains a placeholder.
+ * Registers the built-in command set. Every registered command is implemented;
+ * `analyze`, `recommend`, `patterns`, and `explain` are kept as compatible names
+ * for `scan`, `suggest`, `list`/`search`, and `show`.
  */
 
 import type { CommandRegistry } from "../command-registry.ts";
@@ -18,7 +18,10 @@ import { updateCommand } from "./update.ts";
 import { syncCommand } from "./sync.ts";
 import { watchCommand } from "./watch.ts";
 import { optimizeCommand } from "./optimize.ts";
-import { planned } from "./planned.ts";
+import { planCommand } from "./plan.ts";
+import { detectCommand } from "./detect.ts";
+import { profilesCommand } from "./profiles.ts";
+import { skillsCommand } from "./skills.ts";
 
 export function registerBuiltinCommands(registry: CommandRegistry): void {
   registry.register(initCommand);
@@ -39,12 +42,8 @@ export function registerBuiltinCommands(registry: CommandRegistry): void {
   registry.register(doctorCommand);
   registry.register(updateCommand);
   registry.register(optimizeCommand);
-
-  registry.register(
-    planned({
-      name: "diff",
-      summary: "Compare architecture between two revisions.",
-      module: "Module 2 — Analyzer",
-    }),
-  );
+  registry.register(detectCommand);
+  registry.register(planCommand);
+  registry.register(profilesCommand);
+  registry.register(skillsCommand);
 }

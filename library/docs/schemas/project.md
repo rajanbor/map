@@ -9,9 +9,9 @@ Machine contract: [`project.schema.json`](../../schemas/project.schema.json).
 ## Version fields
 
 - `version` is the on-disk configuration revision understood and migrated by the CLI.
-  The current revision is `3`; revision `2` stays valid.
+  The current revision is `4`; revisions `2` and `3` stay valid.
 - `specVersion` identifies the MAP Standard contract. It is optional for existing v2
-  and v3 workspaces. New workspaces write `"0.1"` while the standard is pre-1.0.
+  v2–v4 workspaces. New workspaces write `"0.1"` while the standard is pre-1.0.
 
 Changing `version` can require `map init --yes` migration. A compatible addition to
 the standard changes `specVersion` without silently rewriting user configuration.
@@ -29,6 +29,9 @@ the standard changes `specVersion` without silently rewriting user configuration
 | `tools` | no | Project tool settings, currently the token optimizer. |
 | `sources` | no | Markdown globs loaded from `.map/`; defaults to `**/*.md`. |
 | `targets` | no | Adapter/output mapping for generated agent context. |
+| `agents` | no (v4) | Coding agents the project is set up for: `claude`, `codex`, `cursor`, `copilot`, `gemini`. Drives skill install directories. |
+| `profiles` | no (v4) | Development profiles applied by `map init --profile`. |
+| `skills.sources` | no (v4) | Skill sources: `{ "id", "type": "git", "url", "ref"? }` or `{ "id", "type": "local", "path" }`. Absent means the built-in `rajanbor` source. |
 | `x-*` | no | Experimental project metadata. |
 
 Paths and globs are project-relative. Absolute paths and `..` traversal are rejected.
@@ -38,7 +41,7 @@ Unknown stable fields fail validation; prefix experiments with `x-`.
 
 ```json
 {
-  "version": 3,
+  "version": 4,
   "specVersion": "0.1",
   "project": {
     "name": "example",
@@ -54,12 +57,17 @@ Unknown stable fields fail validation; prefix experiments with `x-`.
 
 See [`fixtures/project/valid/full.json`](../../schemas/fixtures/project/valid/full.json).
 It shows scoped analysis, a pack requirement, token budgeting, source selection, and
-multiple generated targets.
+multiple generated targets. [`v4-agents-skills.json`](../../schemas/fixtures/project/valid/v4-agents-skills.json)
+adds agents, profiles, and skill sources.
 
 ## Compatibility and rollback
 
 The schema accepts existing v2/v3 manifests without `specVersion`, `packs`, `sources`,
-or `targets`. New fields are additive. Older CLI releases ignore `specVersion` and
-`packs`; pack resolution is intentionally a later capability. To roll back, remove
-those optional fields. The CLI never rewrites an existing manifest without the
-explicit `--force` path already used by `map init`.
+`targets`, `agents`, `profiles`, or `skills`. New fields are additive. Older CLI
+releases reject the v4 fields (they validate unknown keys strictly); to roll back,
+remove `agents`, `profiles`, and `skills` and set `version` to `3`. Pack resolution
+is intentionally a later capability.
+
+`map init` on an existing workspace only *adds* agents, profiles, and targets — it
+never removes entries — and shows the change in its plan before applying it.
+`map init --force` regenerates template files, including this one.

@@ -67,7 +67,7 @@ map suggest                         # patterns worth reviewing for the detected 
 ```
 
 This turns MAP from documentation an agent *reads* into an architecture layer an agent
-*queries* — the direction described in the CLI [vision document](https://github.com/rajanbor/map/blob/main/tooling/docs/vision.md).
+*queries* — the direction described in the [MAP roadmap](../../../docs/roadmap.md).
 
 ## The long-term vision
 

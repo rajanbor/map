@@ -25,6 +25,9 @@ function fakeStorage(files: Record<string, string>): Storage {
     async listDirs() {
       return [];
     },
+    async listEntries() {
+      return [];
+    },
     async listFiles(path) {
       return Object.keys(files)
         .filter((f) => f.startsWith(`${path}/`))

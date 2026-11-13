@@ -6,7 +6,7 @@
  * deep paths.
  */
 
-// Domain (Module 1 data model + graph/analysis/recommendation types)
+// Domain types
 export * from "./domain/index.ts";
 
 // Core modules
@@ -17,10 +17,14 @@ export * from "./recommendation/index.ts";
 export * from "./storage/index.ts";
 export * from "./reporting/index.ts";
 export * from "./config/index.ts";
-export * from "./plugins/index.ts";
 export * from "./project/index.ts";
 export * from "./scaffold/index.ts";
 export * from "./optimization/index.ts";
+export * from "./agents/index.ts";
+export * from "./profiles/index.ts";
+export * from "./skills/index.ts";
+export { buildPlan } from "./plan/planner.ts";
+export type { Plan, PlanContext, PlanOptions, PlannedChange, PlannedSkill } from "./plan/planner.ts";
 
 // Composition root
 export { createDefaultServices } from "./services.ts";

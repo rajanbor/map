@@ -10,12 +10,8 @@
 
 import type { Storage } from "./storage/index.ts";
 import { FileSystemStorage } from "./storage/index.ts";
-import type { KnowledgeBase, PatternCatalog } from "./knowledge/index.ts";
-import {
-  InMemoryKnowledgeBase,
-  RegistryPatternCatalog,
-  loadRegistryResilient,
-} from "./knowledge/index.ts";
+import type { PatternCatalog } from "./knowledge/index.ts";
+import { RegistryPatternCatalog, loadRegistryResilient } from "./knowledge/index.ts";
 import type { PatternGraph } from "./graph/index.ts";
 import { InMemoryPatternGraph } from "./graph/index.ts";
 import { AnalyzerRegistry, DependencyManifestAnalyzer } from "./analyzer/index.ts";
@@ -26,7 +22,6 @@ import { defaultAdapterRegistry } from "./compiler/index.ts";
 
 export interface Services {
   readonly storage: Storage;
-  readonly knowledgeBase: KnowledgeBase;
   readonly catalog: PatternCatalog;
   readonly graph: PatternGraph;
   readonly analyzers: AnalyzerRegistry;
@@ -42,7 +37,6 @@ export function createDefaultServices(overrides: ServiceOverrides = {}): Service
   const storage = overrides.storage ?? new FileSystemStorage();
   return {
     storage,
-    knowledgeBase: overrides.knowledgeBase ?? new InMemoryKnowledgeBase(),
     catalog: overrides.catalog ?? defaultCatalog(storage),
     graph: overrides.graph ?? new InMemoryPatternGraph(),
     analyzers: overrides.analyzers ?? defaultAnalyzers(storage),

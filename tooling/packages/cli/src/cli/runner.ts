@@ -35,7 +35,7 @@ export async function runCli(
   let exitCode = 0;
 
   const program = new CommanderCommand("map")
-    .description("MAP — initialize, analyze, optimize, and compile your AI project context.")
+    .description("MAP — prepare, configure, and maintain AI coding environments across projects and agents.")
     .version(packageVersion(), "-v, --version")
     .exitOverride()
     .configureOutput({
@@ -69,14 +69,28 @@ function attach(
   setExitCode: (code: number) => void,
 ): void {
   const sub = program.command(command.name).description(command.summary);
-  if (command.args !== undefined) sub.argument(command.args);
+  if (command.subcommands !== undefined && command.subcommands.length > 0) {
+    for (const child of command.subcommands) attach(sub, child, base, setExitCode);
+    sub.action(async () => {
+      sub.outputHelp();
+      setExitCode(1);
+    });
+    return;
+  }
+  if (command.args !== undefined) {
+    for (const arg of command.args.split(/\s+/).filter((a) => a !== "")) sub.argument(arg);
+  }
   for (const option of command.options ?? []) {
     sub.option(option.flags, option.description);
   }
 
   sub.action(async (...invocation) => {
-    // Commander passes declared positionals, then the options object, then itself.
-    const args = invocation.slice(0, -2).filter((a): a is string => typeof a === "string");
+    // Commander passes declared positionals (variadic ones as arrays), then the
+    // options object, then itself.
+    const args = invocation
+      .slice(0, -2)
+      .flatMap((a: unknown) => (Array.isArray(a) ? a : [a]))
+      .filter((a): a is string => typeof a === "string");
     const flags = invocation[invocation.length - 2] as Record<string, FlagValue>;
 
     try {

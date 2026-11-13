@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "kind": "map.project-profile",
+  "root": "/work/shop",
+  "project": {
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "nextjs",
+      "react"
+    ],
+    "infrastructure": [
+      "docker"
+    ],
+    "tooling": [
+      "vitest"
+    ],
+    "agents": [
+      "claude"
+    ]
+  },
+  "probable": {
+    "languages": [],
+    "frameworks": [],
+    "infrastructure": [
+      "postgresql"
+    ],
+    "tooling": [],
+    "agents": [
+      "codex"
+    ]
+  },
+  "workspaces": [
+    {
+      "path": ".",
+      "manifests": [
+        "package.json"
+      ],
+      "languages": [
+        "typescript"
+      ],
+      "frameworks": [
+        "nextjs",
+        "react"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "signal": "nextjs",
+      "category": "framework",
+      "certainty": "absent",
+      "file": "package.json",
+      "detail": "declares next"
+    },
+    {
+      "signal": "postgresql",
+      "category": "infrastructure",
+      "certainty": "probable",
+      "file": "package.json",
+      "detail": "declares pg"
+    },
+    {
+      "signal": "codex",
+      "category": "agent",
+      "certainty": "probable",
+      "file": "AGENTS.md",
+      "detail": "OpenAI Codex configuration"
+    }
+  ],
+  "traversal": {
+    "maxDepth": 3,
+    "maxDirectories": 400,
+    "directoriesVisited": 12,
+    "truncated": false
+  },
+  "limitations": [
+    "A technology or security control that is not listed is unknown, not absent."
+  ]
+}

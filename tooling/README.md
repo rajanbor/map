@@ -1,80 +1,43 @@
-<p align="center">
-  <strong>MAP CLI</strong> — the command line for <a href="https://github.com/rajanbor/map">Missing AI Patterns</a>
-</p>
+# MAP tooling
 
-# missing-ai-patterns/cli
+The pnpm workspace for the `map` CLI and two small published contract packages.
+User documentation lives in the [root README](../README.md) and [`docs/`](../docs/).
 
-The `map` command and its shared libraries inside the consolidated MAP monorepo.
-The pattern catalog under [`../library`](../library/) compiles into the registry this
-workspace consumes.
-
-```bash
-git clone https://github.com/rajanbor/map.git
-cd map
-./scripts/install.sh
-
-map init        # create the .map/ workspace in your project
-map scan        # detect evidence-backed architecture signals
-map suggest     # find patterns worth reviewing
-map show retrieval/chunking
-map add retrieval/chunking
-```
-
-## Packages
-
-| Package | Path | Purpose |
-|---------|------|---------|
-| [`@missing-ai-patterns/cli`](packages/cli/) | `packages/cli` | The `map` command. |
-| [`@missing-ai-patterns/score`](packages/score/) | `packages/score` | MAP Score schema, validation, and rendering (shared by the CLI, the registry builder, and the future website). |
-
-## How data flows
-
-```
-library/ (patterns, ROADMAP)
-   └── scripts/build-registry.ts → registry.json
-         └── tooling: bundled snapshot + `map update` cache
-```
-
-The CLI never parses the map repository's Markdown — it reads `registry.json`
-(see the [registry spec](https://github.com/rajanbor/map/blob/main/library/docs/specs/registry.md)).
-Everything except `map update` works offline.
+| Package | Purpose |
+|---|---|
+| [`packages/cli`](packages/cli/) | The `map` command: detection, planning, skills, context compiler, pattern catalog. |
+| [`packages/registry`](packages/registry/) | `@missing-ai-patterns/registry` — registry document types and the validating parser. |
+| [`packages/score`](packages/score/) | `@missing-ai-patterns/score` — MAP Score schema, validation, and rendering. |
 
 ## Develop
 
-Node >= 22 (dev runs TypeScript directly; the published packages target Node >= 20)
-and pnpm.
+Node 22+ for development (the CLI runs TypeScript directly; builds target Node 20+).
 
 ```bash
-pnpm install
-pnpm build            # builds score, then cli (topological)
-pnpm typecheck
-pnpm test
-pnpm lint
-pnpm map -- --help    # run the CLI from source
+corepack pnpm install --frozen-lockfile
+corepack pnpm build
+corepack pnpm lint
+corepack pnpm typecheck
+corepack pnpm test                       # offline; uses local Git fixtures
+node packages/cli/bin/map.ts --help      # run the CLI from source
 ```
 
-Developing against a local map checkout:
+Tests set `MAP_OFFLINE=1` and a temporary `MAP_HOME`, so they never touch the network
+or your `~/.map` cache.
+
+The pattern registry is built from [`../library`](../library/) and bundled as
+`packages/cli/registry-snapshot/registry.json`. Refresh it after pattern changes:
 
 ```bash
-MAP_REGISTRY=path/to/map/library/dist/registry.json pnpm map -- list
-MAP_REPO=path/to/map pnpm --filter @missing-ai-patterns/cli sync-snapshot
+MAP_REPO=.. corepack pnpm --filter @missing-ai-patterns/cli sync-snapshot
 ```
 
 ## Releasing
 
-1. Bump versions in `packages/*/package.json`.
-2. Refresh the bundled registry with `MAP_REPO=.. pnpm --filter @missing-ai-patterns/cli sync-snapshot`.
-3. Tag `sdk/v<version>` only when the npm publication workflow and credentials are ready.
-
-The public npm package is not currently published; the supported user installation is
-the repository-level GitHub installer.
-
-## Contributing
-
-Issues and PRs for tooling, patterns, and documentation all belong in
-[rajanbor/map](https://github.com/rajanbor/map). The
-[vision document](docs/vision.md) describes where the CLI is heading.
+1. Bump versions in `packages/*/package.json` and update [CHANGELOG.md](../CHANGELOG.md).
+2. Refresh the registry snapshot (above).
+3. Tag `sdk/v<version>`; the release workflow publishes to npm.
 
 ## License
 
-[MIT](LICENSE).
+[MIT](../library/LICENSE).

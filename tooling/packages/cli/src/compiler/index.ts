@@ -10,8 +10,12 @@
  */
 
 export { loadContext, globToRegExp } from "./loader.ts";
-export { compile } from "./compile.ts";
-export type { CompiledOutput, CompileResult } from "./compile.ts";
+export { compile, ownershipOf, GENERATED_MARKER } from "./compile.ts";
+export type { CompiledOutput, CompileResult, Ownership } from "./compile.ts";
+export { applyOutputs, planOutputs } from "./outputs.ts";
+export type { OutputAction, OutputPlan } from "./outputs.ts";
+export { compileWorkspace, readWorkspaceConfig } from "./workspace.ts";
+export type { WorkspaceCompilation } from "./workspace.ts";
 
 export { resolveCompilerConfig } from "./compiler-config.ts";
 export type { ResolvedCompilerConfig, ResolvedTarget } from "./compiler-config.ts";

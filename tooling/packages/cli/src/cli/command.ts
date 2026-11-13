@@ -43,6 +43,8 @@ export interface Command {
   /** Positional argument spec, e.g. "[path]" or "<pattern-id>". */
   readonly args?: string;
   readonly options?: readonly CommandOption[];
+  /** Nested commands (`map skills add`). A group may omit `run`'s real work. */
+  readonly subcommands?: readonly Command[];
   run(context: CommandContext): Promise<CommandResult>;
 }
 

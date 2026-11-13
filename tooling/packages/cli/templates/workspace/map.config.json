@@ -22,11 +22,7 @@
     }
   },
   "sources": ["**/*.md"],
-  "targets": {
-    "claude": { "output": "CLAUDE.md" },
-    "agents": { "output": "AGENTS.md" },
-    "gemini": { "output": "GEMINI.md" },
-    "cursor": { "output": ".cursor/rules/map.mdc" },
-    "copilot": { "output": ".github/copilot-instructions.md" }
-  }
+  "targets": {{targets}},
+  "agents": {{agents}},
+  "profiles": {{profiles}}
 }
